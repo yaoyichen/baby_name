@@ -140,6 +140,52 @@ main{flex:1;overflow-y:auto;padding:18px 22px 48px;display:flex;flex-direction:c
 .empty{text-align:center;padding:60px 0;color:var(--ink3);font-size:14px;line-height:2.2}
 .empty .big{font-size:36px;opacity:.3;margin-bottom:8px}
 
+/* 查名专属 */
+.lookup-wrap{max-width:560px;margin:48px auto 0;display:flex;flex-direction:column;align-items:center;gap:24px}
+.lookup-title{font-family:'Noto Serif SC',serif;font-size:18px;color:var(--ink2);letter-spacing:.06em}
+.lookup-input-row{display:flex;align-items:center;gap:10px}
+.lookup-surname{width:52px;height:52px;border:2px solid var(--border);border-radius:10px;background:var(--card);font-family:'Noto Serif SC',serif;font-size:26px;font-weight:300;color:var(--ink3);text-align:center;outline:none;transition:border-color .2s}
+.lookup-name-input{width:108px;height:52px;border:2px solid var(--green);border-radius:10px;background:var(--card);font-family:'Noto Serif SC',serif;font-size:26px;font-weight:600;color:var(--ink);text-align:center;letter-spacing:.12em;outline:none;transition:border-color .2s;padding:0 6px}
+.lookup-name-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,146,74,.15)}
+.lookup-hint{font-size:12px;color:var(--ink3)}
+.lookup-result{width:100%;display:flex;flex-direction:column;gap:12px}
+.lookup-warn{background:#FBF3E4;border:1px solid #e8d5a3;border-radius:8px;padding:10px 14px;font-size:13px;color:#7A5C3A}
+
+/* ── 五格三才 ── */
+.wuge-section{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:14px}
+.wuge-header{display:flex;align-items:center;justify-content:space-between}
+.wuge-title{font-family:'Noto Serif SC',serif;font-size:14px;font-weight:600;color:var(--ink2);letter-spacing:.06em}
+.wuge-score-badge{display:flex;align-items:center;gap:6px}
+.wuge-score-ring{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0}
+.wuge-score-label{font-size:11px;color:var(--ink3);text-align:right;line-height:1.5}
+.wuge-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.wuge-cell{display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px 8px;border-radius:8px;border:1px solid var(--border);background:var(--bg)}
+.wuge-cell-label{font-size:10px;color:var(--ink3);letter-spacing:.04em}
+.wuge-cell-num{font-family:'Noto Serif SC',serif;font-size:18px;font-weight:600;color:var(--ink)}
+.wuge-cell-strokes{font-size:10px;color:var(--ink3)}
+.wuge-cell-rating{font-size:11px;font-weight:600;padding:1px 7px;border-radius:10px}
+.wuge-cell-desc{font-size:9px;color:var(--ink3);text-align:center;line-height:1.4;margin-top:1px}
+.wuge-cell.ji{border-color:#c8dfc8;background:#f0f7f0}.wuge-cell.ji .wuge-cell-rating{background:#3D6B4A;color:#fff}
+.wuge-cell.xiong{border-color:#e8b8b3;background:#FAECEB}.wuge-cell.xiong .wuge-cell-rating{background:#B84A3A;color:#fff}
+.wuge-cell.zhong{border-color:#e0d5c0;background:#f9f5ee}.wuge-cell.zhong .wuge-cell-rating{background:#B8924A;color:#fff}
+.wuge-cell.ren{border-left:3px solid var(--green)}
+.sancai-section{display:flex;flex-direction:column;gap:8px}
+.sancai-title{font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--ink3)}
+.sancai-flow{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.sancai-item{display:flex;flex-direction:column;align-items:center;gap:2px}
+.sancai-item-label{font-size:9px;color:var(--ink3)}
+.sancai-item-wx{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff}
+.sancai-item-num{font-size:9px;color:var(--ink3)}
+.sancai-arrow{font-size:16px;padding-bottom:10px}
+.sancai-arrow.sheng{color:#3D6B4A}
+.sancai-arrow.ke{color:#B84A3A}
+.sancai-arrow.tong{color:#B8924A}
+.sancai-verdict{font-size:12px;padding:6px 12px;border-radius:6px;line-height:1.6}
+.sancai-verdict.sheng{background:#f0f7f0;color:#2d5238;border-left:3px solid #3D6B4A}
+.sancai-verdict.ke{background:#FAECEB;color:#7A2518;border-left:3px solid #B84A3A}
+.sancai-verdict.mix{background:#FBF3E4;color:#5C4010;border-left:3px solid #B8924A}
+.wuge-no-sur{font-size:12px;color:var(--ink3);text-align:center;padding:12px;background:var(--bg);border-radius:8px;border:1px dashed var(--border)}
+
 /* 收藏夹专属 */
 .fav-header{display:flex;align-items:center;justify-content:space-between;padding:4px 0}
 .fav-title{font-family:'Noto Serif SC',serif;font-size:16px;color:var(--ink)}
@@ -158,6 +204,10 @@ main{flex:1;overflow-y:auto;padding:18px 22px 48px;display:flex;flex-direction:c
 .ban-tag button:hover{opacity:1}
 .ban-empty{font-size:12px;color:var(--ink3);font-style:italic}
 /* 卡片上的拉黑按钮 */
+.multi-badge{font-size:9px;padding:1px 4px;border-radius:3px;background:#F0EBF8;color:#7B5EA7;border:1px solid #d4c5eb;cursor:default;white-space:nowrap}
+.multi-pys{display:flex;flex-wrap:wrap;gap:4px;margin-top:3px}
+.multi-pys span{font-size:10px;color:var(--ink3);background:var(--bg);border-radius:3px;padding:0 4px}
+.multi-pys sub{font-size:8px;color:#7B5EA7}
 .ban-char-btn{font-size:9px;padding:1px 4px;border-radius:3px;border:1px solid transparent;background:transparent;color:var(--ink3);cursor:pointer;transition:all .15s;white-space:nowrap;opacity:0}
 .attr-card:hover .ban-char-btn{opacity:.55}
 .ban-char-btn:hover{opacity:1!important;border-color:#e8b8b3;background:#FAECEB;color:#B84A3A}
@@ -170,6 +220,7 @@ main{flex:1;overflow-y:auto;padding:18px 22px 48px;display:flex;flex-direction:c
   <div class="header-tabs">
     <button class="htab active" id="tabBrowse" onclick="switchTab('browse')">浏览</button>
     <button class="htab" id="tabFav" onclick="switchTab('fav')">收藏夹 <span class="fav-count" id="favCount"></span></button>
+    <button class="htab" id="tabLookup" onclick="switchTab('lookup')">查名</button>
   </div>
   <div class="sep"></div>
   <div class="stat-pill" id="totalPill">加载中…</div>
@@ -182,6 +233,14 @@ main{flex:1;overflow-y:auto;padding:18px 22px 48px;display:flex;flex-direction:c
   <div class="filter-group">
     <div class="filter-label">姓氏</div>
     <input class="surname-input" id="surnameInput" maxlength="1" placeholder="姚">
+  </div>
+
+  <div class="filter-group">
+    <label class="radio-opt" style="gap:8px;cursor:pointer" title="多音字：同一汉字有两种以上读音，如"观"(guān/guàn)。启用后这些字会以主读音纳入候选。">
+      <input type="checkbox" id="multiToggle" checked style="accent-color:var(--green);width:14px;height:14px">
+      <span style="font-size:12px;color:var(--ink2)">包含多音字</span>
+      <span style="font-size:10px;color:var(--ink3);margin-left:2px" title="多音字：同一汉字有两种以上读音，如"观"(guān/guàn)。以主读音分类平仄。">ⓘ</span>
+    </label>
   </div>
 
   <hr class="divider">
@@ -355,6 +414,7 @@ let page = 1, currentTab = 'browse';
 const state = {
   surname:'',
   q1:'', q2:'',
+  multiEnabled: true,
   tone1: new Set(['3','4']),
   tone2: new Set(['1','2']),
   wx1: new Set(['金','木','火','水','土']),
@@ -591,8 +651,10 @@ function renderCard(a, b, surname, favBtnVisible=true) {
           <span class="tone-badge">${TONE_NAMES[a.tone]||a.tone}声</span>
           <span class="stroke-badge">${a.st}画</span>
           <span class="open-badge">${openLabel(a.open)}</span>
+          ${a.multi ? `<span class="multi-badge" title="${(a.pys||[]).map(p=>p.py+(p.tone?'('+p.tone+'声)':'')).join(' / ')}">多音</span>` : ''}
           <button class="ban-char-btn" onclick="addBan('${esc(a.c)}')" title="屏蔽「${esc(a.c)}」字">⊘ 屏蔽</button>
         </div>
+        ${a.multi&&a.pys ? `<div class="multi-pys">${a.pys.map(p=>`<span>${esc(p.py)}<sub>${p.tone||'轻'}</sub></span>`).join('')}</div>` : ''}
       </div>
       <div class="attr-card" style="background:${bg2}">
         <span class="attr-char" style="color:${fg2}">${esc(b.c)}</span>
@@ -601,8 +663,10 @@ function renderCard(a, b, surname, favBtnVisible=true) {
           <span class="tone-badge">${TONE_NAMES[b.tone]||b.tone}声</span>
           <span class="stroke-badge">${b.st}画</span>
           <span class="open-badge">${openLabel(b.open)}</span>
+          ${b.multi ? `<span class="multi-badge" title="${(b.pys||[]).map(p=>p.py+(p.tone?'('+p.tone+'声)':'')).join(' / ')}">多音</span>` : ''}
           <button class="ban-char-btn" onclick="addBan('${esc(b.c)}')" title="屏蔽「${esc(b.c)}」字">⊘ 屏蔽</button>
         </div>
+        ${b.multi&&b.pys ? `<div class="multi-pys">${b.pys.map(p=>`<span>${esc(p.py)}<sub>${p.tone||'轻'}</sub></span>`).join('')}</div>` : ''}
       </div>
     </div>
     ${poemHTML}
@@ -742,8 +806,273 @@ function switchTab(tab) {
   currentTab = tab;
   document.getElementById('tabBrowse').classList.toggle('active', tab==='browse');
   document.getElementById('tabFav').classList.toggle('active', tab==='fav');
+  document.getElementById('tabLookup').classList.toggle('active', tab==='lookup');
   document.getElementById('sidebar').style.display = tab==='browse' ? '' : 'none';
-  if (tab==='browse') renderPage(); else renderFavorites();
+  if (tab==='browse') renderPage();
+  else if (tab==='fav') renderFavorites();
+  else renderLookup();
+}
+
+// ── 五格三才 ──────────────────────────────────────────
+// 81 数理吉凶（1=吉 2=凶 0=中）
+const _W81 = [
+  0,1,2,1,2,1,1,1,1,2, // 1-9 (idx 0 unused, 1-9)
+  2,1,2,1,2,1,1,1,1,2, // 10-19
+  2,1,2,1,1,1,2,2,2,1, // 20-29
+  0,1,1,1,2,1,2,1,0,1, // 30-39
+  2,1,0,2,2,1,2,1,1,2, // 40-49
+  2,0,1,0,2,0,2,1,0,2, // 50-59
+  2,1,2,1,2,1,2,1,1,2, // 60-69
+  2,0,2,1,2,0,2,0,0,2, // 70-79
+  2,1                   // 80-81
+];
+function _w81(n) {
+  // >81 按 ((n-1)%81)+1 折算
+  let m = n > 81 ? ((n-1)%81)+1 : n < 1 ? 1 : n;
+  return _W81[m] ?? 0; // 0=中 1=吉 2=凶
+}
+const _WUGE_RATING = ['中','吉','凶'];
+const _WUGE_DESC = {
+  天格:'祖宗运·先天遗传', 人格:'主运·核心格（最重要）',
+  地格:'前运·36岁前', 总格:'后运·晚年总运', 外格:'副运·社交人缘'
+};
+
+const _WX5_COLOR = {木:'#3D6B4A',火:'#B84A3A',土:'#7A5C3A',金:'#B8924A',水:'#3A5F8B'};
+
+// 尾数 → 五行
+function _digitWx(n) {
+  const d = n % 10;
+  if (d===1||d===2) return '木';
+  if (d===3||d===4) return '火';
+  if (d===5||d===6) return '土';
+  if (d===7||d===8) return '金';
+  return '水'; // 9,0
+}
+
+const _WX_SHENG = {木:'火',火:'土',土:'金',金:'水',水:'木'};
+const _WX_KE    = {木:'土',土:'水',水:'火',火:'金',金:'木'};
+
+// 判断两五行关系：'sheng'生 'ke'克 'tong'同 'bei_sheng'被生 'bei_ke'被克
+function _wxRel(from, to) {
+  if (from===to) return 'tong';
+  if (_WX_SHENG[from]===to) return 'sheng';
+  if (_WX_KE[from]===to)    return 'ke';
+  if (_WX_SHENG[to]===from) return 'bei_sheng';
+  if (_WX_KE[to]===from)    return 'bei_ke';
+  return 'neutral';
+}
+
+function calcWuGe(surSt, c1St, c2St) {
+  const tian = surSt + 1;
+  const ren  = surSt + c1St;
+  const di   = c1St  + c2St;
+  const zong = surSt + c1St + c2St;
+  const wai  = c2St  + 1;          // = zong - ren + 1
+  return {tian, ren, di, zong, wai};
+}
+
+function wugeScore(tian, ren, di, zong, wai) {
+  // 加权：人格 40%，地格 20%，天格 15%，总格 15%，外格 10%
+  const base =
+    _w81(tian)*100/2 * 0.15 +
+    _w81(ren) *100/2 * 0.40 +
+    _w81(di)  *100/2 * 0.20 +
+    _w81(zong)*100/2 * 0.15 +
+    _w81(wai) *100/2 * 0.10;
+  // 三才加减分
+  const wTian = _digitWx(tian), wRen = _digitWx(ren), wDi = _digitWx(di);
+  const r1 = _wxRel(wTian, wRen), r2 = _wxRel(wRen, wDi);
+  let bonus = 0;
+  const _is = r=>r==='sheng'||r==='bei_sheng'||r==='tong';
+  const _ik = r=>r==='ke'||r==='bei_ke';
+  if (_is(r1) && _is(r2)) bonus = 12;
+  else if (_ik(r1)||_ik(r2)) bonus = -12;
+  return Math.min(100, Math.max(0, Math.round(base + bonus)));
+}
+
+function renderWuGe(surCh, a, b) {
+  const charMap = Object.fromEntries(allChars.map(c=>[c.c,c]));
+  if (!surCh) {
+    return `<div class="wuge-section">
+      <div class="wuge-header"><span class="wuge-title">五格三才</span></div>
+      <div class="wuge-no-sur">请在上方输入姓氏以计算五格三才</div>
+    </div>`;
+  }
+  const surData = charMap[surCh];
+  if (!surData) {
+    return `<div class="wuge-section">
+      <div class="wuge-header"><span class="wuge-title">五格三才</span></div>
+      <div class="wuge-no-sur">姓氏「${esc(surCh)}」不在字库，无法计算笔画</div>
+    </div>`;
+  }
+  const surSt = surData.st, c1St = a.st, c2St = b.st;
+  const {tian, ren, di, zong, wai} = calcWuGe(surSt, c1St, c2St);
+  const score = wugeScore(tian, ren, di, zong, wai);
+
+  // 评分颜色
+  const scoreColor = score>=85?'#3D6B4A':score>=70?'#3A5F8B':score>=55?'#B8924A':'#B84A3A';
+  const scoreLabel = score>=85?'上吉':score>=70?'吉':score>=55?'平':score<40?'大凶':'凶';
+
+  // 五格单格渲染
+  function cell(label, n, isMain=false) {
+    const r = _w81(n), cls = ['中','ji','xiong'][r];
+    const rating = _WUGE_RATING[r];
+    const desc = _WUGE_DESC[label]||'';
+    return `<div class="wuge-cell ${cls}${isMain?' ren':''}">
+      <div class="wuge-cell-label">${label}</div>
+      <div class="wuge-cell-num">${n}</div>
+      <div class="wuge-cell-strokes">${
+        label==='天格'?`${esc(surCh)}+1`:
+        label==='人格'?`${esc(surCh)}+${esc(a.c)}`:
+        label==='地格'?`${esc(a.c)}+${esc(b.c)}`:
+        label==='总格'?`${esc(surCh)}+${esc(a.c)}+${esc(b.c)}`:
+        `${esc(b.c)}+1`
+      }</div>
+      <div class="wuge-cell-rating">${rating}</div>
+      <div class="wuge-cell-desc">${esc(desc)}</div>
+    </div>`;
+  }
+
+  // 三才
+  const wTian = _digitWx(tian), wRen = _digitWx(ren), wDi = _digitWx(di);
+  const r1 = _wxRel(wTian, wRen), r2 = _wxRel(wRen, wDi);
+  // 三才判断：相生包含双向（我生对方 / 对方生我），相克同理
+  const isSheng = r => r==='sheng'||r==='bei_sheng';
+  const isKe    = r => r==='ke'||r==='bei_ke';
+  const arrowCls1 = isSheng(r1)?'sheng':isKe(r1)?'ke':'tong';
+  const arrowCls2 = isSheng(r2)?'sheng':isKe(r2)?'ke':'tong';
+  const arrowChar = {sheng:'→',ke:'⇢',tong:'＝'};
+  // 显示实际相生方向的标注（如"金生水"而非"水生金"）
+  function shengLabel(from, to) {
+    if (_WX_SHENG[from]===to) return `${from}生${to}`;
+    if (_WX_SHENG[to]===from) return `${to}生${from}`;
+    if (_WX_KE[from]===to)    return `${from}克${to}`;
+    if (_WX_KE[to]===from)    return `${to}克${from}`;
+    return from===to?'同行':'无关';
+  }
+  const arrowTitle1 = shengLabel(wTian,wRen);
+  const arrowTitle2 = shengLabel(wRen,wDi);
+
+  const allSheng = isSheng(r1) && isSheng(r2);
+  const hasKe    = isKe(r1)||isKe(r2);
+  const verdictCls = allSheng?'sheng':hasKe?'ke':'mix';
+  const verdictText = allSheng
+    ? `三才相生：${arrowTitle1}，${arrowTitle2}，寓意顺遂、基础稳固，为吉配`
+    : hasKe
+      ? `三才${isKe(r1)?'天人':'人地'}相克：${isKe(r1)?arrowTitle1:arrowTitle2}，可能带来阻力，建议慎选`
+      : `三才平和：${wTian}·${wRen}·${wDi}，无明显相生相克，运势平稳`;
+
+  function scItem(label, wxName, num) {
+    const col = _WX5_COLOR[wxName]||'#888';
+    return `<div class="sancai-item">
+      <div class="sancai-item-label">${label}格</div>
+      <div class="sancai-item-wx" style="background:${col}">${wxName}</div>
+      <div class="sancai-item-num">${num}→尾${num%10||10}</div>
+    </div>`;
+  }
+
+  return `<div class="wuge-section">
+    <div class="wuge-header">
+      <span class="wuge-title">五格三才 · 数理分析</span>
+      <div class="wuge-score-badge">
+        <div>
+          <div class="wuge-score-label">${esc(surCh)}${esc(a.c)}${esc(b.c)}<br>笔画 ${surSt}+${c1St}+${c2St}</div>
+        </div>
+        <div class="wuge-score-ring" style="background:${scoreColor}" title="综合评分">${score}</div>
+        <div style="font-size:12px;font-weight:700;color:${scoreColor}">${scoreLabel}</div>
+      </div>
+    </div>
+    <div class="wuge-grid">
+      ${cell('天格',tian)} ${cell('人格',ren,true)} ${cell('地格',di)} ${cell('总格',zong)} ${cell('外格',wai)}
+    </div>
+    <div class="sancai-section">
+      <div class="sancai-title">三才五行</div>
+      <div class="sancai-flow">
+        ${scItem('天',wTian,tian)}
+        <div class="sancai-arrow ${arrowCls1}" title="${arrowTitle1}">${arrowChar[arrowCls1]}</div>
+        ${scItem('人',wRen,ren)}
+        <div class="sancai-arrow ${arrowCls2}" title="${arrowTitle2}">${arrowChar[arrowCls2]}</div>
+        ${scItem('地',wDi,di)}
+      </div>
+      <div class="sancai-verdict ${verdictCls}">${verdictText}</div>
+    </div>
+  </div>`;
+}
+
+// ── 查名 ──────────────────────────────────────────────
+function renderLookup() {
+  const mainEl = document.getElementById('main');
+  const surname = state.surname;
+  mainEl.innerHTML = `
+    <div class="lookup-wrap">
+      <div class="lookup-title">输入名字，查看详细属性</div>
+      <div class="lookup-input-row">
+        <input class="lookup-surname" id="lookupSurname" maxlength="1"
+          value="${esc(surname)}" placeholder="姓" title="姓氏（可选）">
+        <input class="lookup-name-input" id="lookupInput" maxlength="2"
+          placeholder="名字" autocomplete="off">
+      </div>
+      <div class="lookup-hint">输入两个汉字，自动显示属性</div>
+      <div class="lookup-result" id="lookupResult"></div>
+    </div>`;
+
+  // 绑定输入事件
+  const nameInp = document.getElementById('lookupInput');
+  const surInp  = document.getElementById('lookupSurname');
+  nameInp.addEventListener('input', doLookup);
+  surInp.addEventListener('input',  doLookup);
+  nameInp.focus();
+}
+
+function doLookup() {
+  const raw  = document.getElementById('lookupInput').value.trim();
+  const sur  = document.getElementById('lookupSurname').value.trim();
+  const res  = document.getElementById('lookupResult');
+  if (!res) return;
+
+  const chars = [...raw].filter(c => /[\u4e00-\u9fff]/.test(c));
+  if (chars.length < 2) { res.innerHTML = ''; return; }
+
+  const c1 = chars[0], c2 = chars[1];
+  const charMap = Object.fromEntries(allChars.map(c => [c.c, c]));
+  const a = charMap[c1], b = charMap[c2];
+
+  const warns = [];
+  if (!a) warns.push(`「${c1}」不在五行字库中（无法显示属性）`);
+  if (!b) warns.push(`「${c2}」不在五行字库中（无法显示属性）`);
+
+  let html = '';
+  if (warns.length) {
+    html += `<div class="lookup-warn">⚠ ${warns.join('；')}</div>`;
+  }
+  if (a && b) {
+    html += renderCard(a, b, sur, true);
+    html += renderWuGe(sur, a, b);
+  } else if (a || b) {
+    // 单字属性展示
+    [a, b].forEach((ch, idx) => {
+      if (!ch) return;
+      const other = idx===0 ? b : a;
+      if (!other) {
+        const [fg,bg] = WX_COLOR[ch.wx]||['#888','#eee'];
+        const openLabel = o => o==='large'?'大开口':'小开口';
+        html += `<div class="card" style="max-width:260px">
+          <div class="name-row"><span class="name-chars" style="font-size:28px">${esc(ch.c)}</span>
+            <div class="name-py" style="margin-left:12px">${esc(ch.py)}</div></div>
+          <div class="attrs"><div class="attr-card" style="background:${bg}">
+            <span class="attr-char" style="color:${fg}">${esc(ch.c)}</span>
+            <div class="attr-detail">
+              <span class="wx-badge" style="${wxStyle(ch.wx)}">${esc(ch.wx)}</span>
+              <span class="tone-badge">${TONE_NAMES[ch.tone]||ch.tone}声</span>
+              <span class="stroke-badge">${ch.st}画</span>
+              <span class="open-badge">${openLabel(ch.open)}</span>
+            </div>
+          </div></div>
+        </div>`;
+      }
+    });
+  }
+  res.innerHTML = html;
 }
 
 // ── 过滤 ────────────────────────────────────────────
@@ -774,16 +1103,18 @@ function toneLabel(toneSet) {
 }
 
 function applyFilter() {
-  const {tone1,tone2,wx1,wx2,open1,open2,st1Min,st1Max,st2Min,st2Max,srcFilter,q1,q2} = state;
+  const {tone1,tone2,wx1,wx2,open1,open2,st1Min,st1Max,st2Min,st2Max,srcFilter,q1,q2,multiEnabled} = state;
   const needPoem = srcFilter==='poem';
   const ban = loadBan();
 
   filtC1 = sortPool(allChars.filter(c =>
+    (multiEnabled || !c.multi) &&
     toneMatch(c,tone1) && wx1.has(c.wx) && open1.has(c.open) &&
     c.st>=st1Min && c.st<=st1Max &&
     (!needPoem||!!c.sent) && matchQuery(c,q1) && !ban.has(c.c)
   ));
   filtC2 = sortPool(allChars.filter(c =>
+    (multiEnabled || !c.multi) &&
     toneMatch(c,tone2) && wx2.has(c.wx) && open2.has(c.open) &&
     c.st>=st2Min && c.st<=st2Max &&
     (!needPoem||!!c.sent) && matchQuery(c,q2) && !ban.has(c.c)
@@ -850,7 +1181,8 @@ document.getElementById('resetBtn').addEventListener('click',()=>{
   state.open1=new Set(['large','small']);
   state.open2=new Set(['large','small']);
   state.st1Min=1; state.st1Max=25; state.st2Min=1; state.st2Max=25;
-  state.srcFilter='all'; state.sort='default';
+  state.multiEnabled=true; state.srcFilter='all'; state.sort='default';
+  document.getElementById('multiToggle').checked=true;
   // 重置平仄 chip 视觉状态
   document.querySelectorAll('#tone1Group .chip').forEach(c=>c.classList.toggle('active',c.dataset.tone==='3'||c.dataset.tone==='4'));
   document.querySelectorAll('#tone2Group .chip').forEach(c=>c.classList.toggle('active',c.dataset.tone==='1'||c.dataset.tone==='2'));
@@ -882,6 +1214,10 @@ async function init() {
     // 黑名单输入框支持回车
     document.getElementById('banInput').addEventListener('keydown', e=>{
       if (e.key==='Enter') addBanFromInput();
+    });
+    document.getElementById('multiToggle').addEventListener('change', e=>{
+      state.multiEnabled = e.target.checked;
+      applyFilter();
     });
     applyFilter();
   } catch(err) {
