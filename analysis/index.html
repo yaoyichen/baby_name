@@ -211,6 +211,69 @@ main{flex:1;overflow-y:auto;padding:18px 22px 48px;display:flex;flex-direction:c
 .ban-char-btn{font-size:9px;padding:1px 4px;border-radius:3px;border:1px solid transparent;background:transparent;color:var(--ink3);cursor:pointer;transition:all .15s;white-space:nowrap;opacity:0}
 .attr-card:hover .ban-char-btn{opacity:.55}
 .ban-char-btn:hover{opacity:1!important;border-color:#e8b8b3;background:#FAECEB;color:#B84A3A}
+
+/* ── AI起名 tab ── */
+.ai-wrap{display:flex;flex-direction:column;gap:14px}
+.ai-config-bar{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ai-cfg-group{display:flex;align-items:center;gap:7px}
+.ai-cfg-label{font-size:11px;font-weight:600;color:var(--ink3);letter-spacing:.04em;white-space:nowrap}
+.ai-model-sel{height:32px;padding:0 8px;border:1px solid var(--border);border-radius:8px;background:var(--bg);font-size:13px;color:var(--ink);outline:none;cursor:pointer;max-width:220px}
+.ai-apikey-input{height:32px;padding:0 10px;border:1px solid var(--border);border-radius:8px;background:var(--bg);font-size:12px;color:var(--ink);outline:none;width:200px;transition:border-color .2s}
+.ai-apikey-input:focus{border-color:var(--green)}
+.ai-pool-status{display:flex;align-items:center;gap:6px;flex:1;justify-content:flex-end;min-width:0}
+.ai-pool-badge{font-size:11px;padding:2px 8px;border-radius:4px;font-weight:500;white-space:nowrap}
+.ai-pool-badge.ze{background:var(--wx-火-bg);color:var(--wx-火)}
+.ai-pool-badge.ping{background:var(--wx-水-bg);color:var(--wx-水)}
+.ai-adjust-btn{height:26px;padding:0 10px;background:transparent;border:1px solid var(--border);border-radius:6px;font-size:11px;color:var(--ink2);cursor:pointer;transition:all .18s;white-space:nowrap}
+.ai-adjust-btn:hover{border-color:var(--green);color:var(--green)}
+.ai-gen-btn{height:36px;padding:0 22px;background:var(--green);border:none;border-radius:8px;color:#fff;font-size:14px;font-weight:500;cursor:pointer;white-space:nowrap;transition:background .18s;letter-spacing:.02em;flex-shrink:0}
+.ai-gen-btn:hover:not(:disabled){background:#2d5238}
+.ai-gen-btn:disabled{opacity:.4;cursor:default}
+.ai-gen-btn.stop{background:#B84A3A}
+.ai-gen-btn.stop:hover{background:#a03a2a}
+.ai-bazi-card{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.ai-bazi-summary{list-style:none;padding:10px 14px;font-size:12px;font-weight:600;color:var(--ink2);cursor:pointer;user-select:none;display:flex;align-items:center;gap:8px}
+.ai-bazi-summary::marker,.ai-bazi-summary::-webkit-details-marker{display:none}
+.ai-bazi-summary::before{content:'▸';font-size:10px;color:var(--ink3);transition:transform .2s;display:inline-block}
+details[open] .ai-bazi-summary::before{transform:rotate(90deg)}
+.ai-bazi-body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--border)}
+.ai-bazi-row{display:flex;flex-direction:column;gap:5px}
+.ai-bazi-label{font-size:11px;color:var(--ink3);font-weight:500}
+.ai-bazi-surname{width:80px;height:34px;border:1px solid var(--border);border-radius:8px;background:var(--bg);font-family:'Noto Serif SC',serif;font-size:18px;font-weight:600;color:var(--ink);text-align:center;outline:none;transition:border-color .2s}
+.ai-bazi-surname:focus{border-color:var(--green)}
+.ai-bazi-text{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;background:var(--bg);font-size:12px;color:var(--ink2);line-height:1.7;outline:none;resize:vertical;font-family:'Noto Sans SC',monospace;transition:border-color .2s}
+.ai-bazi-text:focus{border-color:var(--green)}
+.ai-results{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;min-height:120px}
+.ai-idle{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;gap:10px;color:var(--ink3);font-size:14px;text-align:center}
+.ai-idle-icon{font-size:32px;opacity:.3}
+.ai-idle-warn{font-size:12px;background:#FBF3E4;border:1px solid #e8d5a3;border-radius:6px;padding:8px 14px;color:#7A5C3A;margin-top:8px}
+.ai-streaming{padding:20px;display:flex;flex-direction:column;gap:12px}
+.ai-streaming-header{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ink2)}
+.ai-stream-count{margin-left:auto;font-size:11px;background:var(--green-l);color:var(--green);padding:2px 8px;border-radius:4px;font-weight:500}
+.ai-stream-preview{font-size:10px;color:var(--ink3);background:var(--bg);border-radius:6px;padding:8px 10px;max-height:80px;overflow:hidden;white-space:pre-wrap;word-break:break-all;font-family:monospace}
+.ai-error{padding:20px;color:#B84A3A;background:#FAECEB;font-size:13px}
+.ai-raw-output{font-size:10px;color:var(--ink3);background:var(--bg);padding:8px;border-radius:4px;max-height:200px;overflow-y:auto;white-space:pre-wrap;word-break:break-all;margin-top:8px}
+.ai-table-header{padding:10px 14px 0;font-size:12px;color:var(--ink3);display:flex;align-items:center;gap:10px}
+.ai-table-header strong{color:var(--ink)}
+.ai-table-wrap{overflow-x:auto;padding-bottom:4px}
+.ai-table{width:100%;border-collapse:collapse;font-size:13px}
+.ai-table thead tr{border-bottom:2px solid var(--border)}
+.ai-table th{padding:8px 12px;text-align:left;font-size:11px;font-weight:600;color:var(--ink3);letter-spacing:.04em;white-space:nowrap;background:var(--bg)}
+.ai-table tbody tr{border-bottom:1px solid var(--border);transition:background .15s}
+.ai-table tbody tr:hover{background:var(--card-hov)}
+.ai-td-num{padding:10px 8px;width:32px;color:var(--ink3);font-size:11px;text-align:center}
+.ai-td-name{padding:10px 12px;white-space:nowrap}
+.ai-name-sur{font-family:'Noto Serif SC',serif;font-size:17px;font-weight:300;color:var(--ink3)}
+.ai-name-chars{font-family:'Noto Serif SC',serif;font-size:19px;font-weight:600;color:var(--ink)}
+.ai-char-wx{font-size:10px;font-weight:600;padding:1px 5px;border-radius:4px}
+.ai-td-score{padding:10px 12px;width:56px;text-align:center}
+.ai-score-badge{font-size:12px;font-weight:700;color:#fff;padding:3px 8px;border-radius:20px;display:inline-block}
+.ai-td-text{padding:10px 12px;font-size:12px;color:var(--ink2);max-width:220px;line-height:1.55}
+.ai-td-src{padding:10px 12px;font-size:11px;color:var(--ink3);max-width:150px;line-height:1.5}
+.ai-td-fav{padding:10px 12px;width:36px;text-align:center}
+.ai-fav-btn{background:none;border:none;font-size:16px;cursor:pointer;color:var(--ink3);opacity:.5;transition:opacity .2s,transform .2s;padding:2px}
+.ai-fav-btn:hover{opacity:1;transform:scale(1.2)}
+.ai-fav-btn.saved{opacity:1;color:var(--gold)}
 </style>
 </head>
 <body>
@@ -221,6 +284,7 @@ main{flex:1;overflow-y:auto;padding:18px 22px 48px;display:flex;flex-direction:c
     <button class="htab active" id="tabBrowse" onclick="switchTab('browse')">浏览</button>
     <button class="htab" id="tabFav" onclick="switchTab('fav')">收藏夹 <span class="fav-count" id="favCount"></span></button>
     <button class="htab" id="tabLookup" onclick="switchTab('lookup')">查名</button>
+    <button class="htab" id="tabAI" onclick="switchTab('ai')" style="background:linear-gradient(135deg,var(--green-l),#EEE8F8);color:var(--green)">✦ AI起名</button>
   </div>
   <div class="sep"></div>
   <div class="stat-pill" id="totalPill">加载中…</div>
@@ -232,7 +296,7 @@ main{flex:1;overflow-y:auto;padding:18px 22px 48px;display:flex;flex-direction:c
 
   <div class="filter-group">
     <div class="filter-label">姓氏</div>
-    <input class="surname-input" id="surnameInput" maxlength="1" placeholder="姚">
+    <input class="surname-input" id="surnameInput" maxlength="1" placeholder="姚" value="姚">
   </div>
 
   <div class="filter-group">
@@ -412,7 +476,7 @@ let allChars = [], filtC1 = [], filtC2 = [];
 let page = 1, currentTab = 'browse';
 
 const state = {
-  surname:'',
+  surname:'姚',
   q1:'', q2:'',
   multiEnabled: true,
   tone1: new Set(['3','4']),
@@ -648,10 +712,11 @@ function renderCard(a, b, surname, favBtnVisible=true) {
         <span class="attr-char" style="color:${fg1}">${esc(a.c)}</span>
         <div class="attr-detail">
           <span class="wx-badge" style="${wxStyle(a.wx)}">${esc(a.wx)}</span>
-          <span class="tone-badge">${TONE_NAMES[a.tone]||a.tone}声</span>
-          <span class="stroke-badge">${a.st}画</span>
+          ${a.tone?`<span class="tone-badge">${TONE_NAMES[a.tone]||a.tone}声</span>`:''}
+          ${a.st?`<span class="stroke-badge">${a.st}画</span>`:''}
           <span class="open-badge">${openLabel(a.open)}</span>
           ${a.multi ? `<span class="multi-badge" title="${(a.pys||[]).map(p=>p.py+(p.tone?'('+p.tone+'声)':'')).join(' / ')}">多音</span>` : ''}
+          ${a._fallback?'<span style="font-size:10px;color:#B8924A;background:#FBF3E4;padding:1px 5px;border-radius:4px">字库外</span>':''}
           <button class="ban-char-btn" onclick="addBan('${esc(a.c)}')" title="屏蔽「${esc(a.c)}」字">⊘ 屏蔽</button>
         </div>
         ${a.multi&&a.pys ? `<div class="multi-pys">${a.pys.map(p=>`<span>${esc(p.py)}<sub>${p.tone||'轻'}</sub></span>`).join('')}</div>` : ''}
@@ -660,10 +725,11 @@ function renderCard(a, b, surname, favBtnVisible=true) {
         <span class="attr-char" style="color:${fg2}">${esc(b.c)}</span>
         <div class="attr-detail">
           <span class="wx-badge" style="${wxStyle(b.wx)}">${esc(b.wx)}</span>
-          <span class="tone-badge">${TONE_NAMES[b.tone]||b.tone}声</span>
-          <span class="stroke-badge">${b.st}画</span>
+          ${b.tone?`<span class="tone-badge">${TONE_NAMES[b.tone]||b.tone}声</span>`:''}
+          ${b.st?`<span class="stroke-badge">${b.st}画</span>`:''}
           <span class="open-badge">${openLabel(b.open)}</span>
           ${b.multi ? `<span class="multi-badge" title="${(b.pys||[]).map(p=>p.py+(p.tone?'('+p.tone+'声)':'')).join(' / ')}">多音</span>` : ''}
+          ${b._fallback?'<span style="font-size:10px;color:#B8924A;background:#FBF3E4;padding:1px 5px;border-radius:4px">字库外</span>':''}
           <button class="ban-char-btn" onclick="addBan('${esc(b.c)}')" title="屏蔽「${esc(b.c)}」字">⊘ 屏蔽</button>
         </div>
         ${b.multi&&b.pys ? `<div class="multi-pys">${b.pys.map(p=>`<span>${esc(p.py)}<sub>${p.tone||'轻'}</sub></span>`).join('')}</div>` : ''}
@@ -807,9 +873,11 @@ function switchTab(tab) {
   document.getElementById('tabBrowse').classList.toggle('active', tab==='browse');
   document.getElementById('tabFav').classList.toggle('active', tab==='fav');
   document.getElementById('tabLookup').classList.toggle('active', tab==='lookup');
+  document.getElementById('tabAI').classList.toggle('active', tab==='ai');
   document.getElementById('sidebar').style.display = tab==='browse' ? '' : 'none';
   if (tab==='browse') renderPage();
   else if (tab==='fav') renderFavorites();
+  else if (tab==='ai') renderAITab();
   else renderLookup();
 }
 
@@ -1035,42 +1103,23 @@ function doLookup() {
 
   const c1 = chars[0], c2 = chars[1];
   const charMap = Object.fromEntries(allChars.map(c => [c.c, c]));
-  const a = charMap[c1], b = charMap[c2];
+  const aRaw = charMap[c1], bRaw = charMap[c2];
+  // 字库外字符用兜底对象，仍可显示卡片（五行/笔画显示"？"）
+  const a = aRaw || makeCharFallback(c1);
+  const b = bRaw || makeCharFallback(c2);
 
   const warns = [];
-  if (!a) warns.push(`「${c1}」不在五行字库中（无法显示属性）`);
-  if (!b) warns.push(`「${c2}」不在五行字库中（无法显示属性）`);
+  if (!aRaw) warns.push(`「${c1}」不在五行字库中，属性为估算`);
+  if (!bRaw) warns.push(`「${c2}」不在五行字库中，属性为估算`);
 
   let html = '';
   if (warns.length) {
     html += `<div class="lookup-warn">⚠ ${warns.join('；')}</div>`;
   }
-  if (a && b) {
-    html += renderCard(a, b, sur, true);
+  // 始终显示卡片；五格三才需要有效笔画数，仅在两字均在字库时显示
+  html += renderCard(a, b, sur, true);
+  if (aRaw && bRaw) {
     html += renderWuGe(sur, a, b);
-  } else if (a || b) {
-    // 单字属性展示
-    [a, b].forEach((ch, idx) => {
-      if (!ch) return;
-      const other = idx===0 ? b : a;
-      if (!other) {
-        const [fg,bg] = WX_COLOR[ch.wx]||['#888','#eee'];
-        const openLabel = o => o==='large'?'大开口':'小开口';
-        html += `<div class="card" style="max-width:260px">
-          <div class="name-row"><span class="name-chars" style="font-size:28px">${esc(ch.c)}</span>
-            <div class="name-py" style="margin-left:12px">${esc(ch.py)}</div></div>
-          <div class="attrs"><div class="attr-card" style="background:${bg}">
-            <span class="attr-char" style="color:${fg}">${esc(ch.c)}</span>
-            <div class="attr-detail">
-              <span class="wx-badge" style="${wxStyle(ch.wx)}">${esc(ch.wx)}</span>
-              <span class="tone-badge">${TONE_NAMES[ch.tone]||ch.tone}声</span>
-              <span class="stroke-badge">${ch.st}画</span>
-              <span class="open-badge">${openLabel(ch.open)}</span>
-            </div>
-          </div></div>
-        </div>`;
-      }
-    });
   }
   res.innerHTML = html;
 }
@@ -1233,6 +1282,485 @@ async function init() {
 }
 
 init();
+
+// ══════════════════════════════════════════════════════════════
+// AI 起名模块
+// ══════════════════════════════════════════════════════════════
+
+const AI_DEFAULT_KEY = 'sk-61YW9qxz5fD6DmHA1JhvY9OgJR98bEaF0GWLS3XocwILylsu';
+const AI_DEFAULT_MODEL = 'deepseek-v3';
+
+const AI_MODEL_GROUPS = [
+  { label: '⭐ 推荐', models: [
+    { id: 'deepseek-v3',        label: 'DeepSeek V3 · 中文强' },
+    { id: 'deepseek-r1',        label: 'DeepSeek R1 · 推理强' },
+    { id: 'gpt-4.1-mini',       label: 'GPT-4.1 Mini · 快速' },
+    { id: 'qwen-plus-latest',   label: 'Qwen Plus · 中文' },
+    { id: 'gpt-4o',             label: 'GPT-4o · 综合强' },
+    { id: 'claude-sonnet-4-6',  label: 'Claude Sonnet 4.6' },
+    { id: 'kimi-k2-0711-preview', label: 'Kimi K2' },
+  ]},
+  { label: 'GPT 4.x', models: [
+    { id: 'gpt-4o',             label: 'GPT-4o' },
+    { id: 'gpt-4o-mini',        label: 'GPT-4o Mini' },
+    { id: 'gpt-4o-2024-11-20',  label: 'GPT-4o 2024-11-20' },
+    { id: 'gpt-4.1',            label: 'GPT-4.1' },
+    { id: 'gpt-4.1-mini',       label: 'GPT-4.1 Mini' },
+    { id: 'gpt-4.1-nano',       label: 'GPT-4.1 Nano' },
+    { id: 'gpt-4-turbo',        label: 'GPT-4 Turbo' },
+    { id: 'gpt-4',              label: 'GPT-4' },
+    { id: 'gpt-4-32k',          label: 'GPT-4 32K' },
+  ]},
+  { label: 'GPT 5', models: [
+    { id: 'gpt-5',              label: 'GPT-5' },
+    { id: 'gpt-5-mini',         label: 'GPT-5 Mini' },
+    { id: 'gpt-5-nano',         label: 'GPT-5 Nano' },
+    { id: 'gpt-5-micro',        label: 'GPT-5 Micro' },
+    { id: 'gpt-5-preview',      label: 'GPT-5 Preview' },
+    { id: 'gpt-5-plus',         label: 'GPT-5 Plus' },
+    { id: 'gpt-5-ultra',        label: 'GPT-5 Ultra' },
+  ]},
+  { label: 'GPT 3.5', models: [
+    { id: 'gpt-3.5-turbo-0125', label: 'GPT-3.5 Turbo' },
+    { id: 'gpt-3.5-turbo-16k',  label: 'GPT-3.5 Turbo 16K' },
+  ]},
+  { label: 'Claude 4', models: [
+    { id: 'claude-sonnet-4-6',          label: 'Claude Sonnet 4.6' },
+    { id: 'claude-opus-4-6',            label: 'Claude Opus 4.6' },
+    { id: 'claude-sonnet-4-20250514',   label: 'Claude Sonnet 4' },
+    { id: 'claude-sonnet-4-5-20250929', label: 'Claude Sonnet 4.5' },
+  ]},
+  { label: 'Claude 1/2', models: [
+    { id: 'claude-2.1',         label: 'Claude 2.1' },
+    { id: 'claude-2',           label: 'Claude 2' },
+    { id: 'claude-instant-1.2', label: 'Claude Instant 1.2' },
+  ]},
+  { label: 'O 系列', models: [
+    { id: 'o4-mini',            label: 'o4-mini' },
+    { id: 'o3',                 label: 'o3' },
+    { id: 'o3-mini',            label: 'o3-mini' },
+    { id: 'o1',                 label: 'o1' },
+    { id: 'o1-mini-2024-09-12', label: 'o1-mini' },
+  ]},
+  { label: 'DeepSeek', models: [
+    { id: 'deepseek-v3',        label: 'DeepSeek V3' },
+    { id: 'deepseek-v3.1',      label: 'DeepSeek V3.1' },
+    { id: 'deepseek-r1',        label: 'DeepSeek R1' },
+    { id: 'deepseek-chat',      label: 'DeepSeek Chat' },
+    { id: 'deepseek-v2',        label: 'DeepSeek V2' },
+  ]},
+  { label: 'Qwen (通义)', models: [
+    { id: 'qwen-max-latest',        label: 'Qwen Max' },
+    { id: 'qwen-plus-latest',       label: 'Qwen Plus' },
+    { id: 'qwen-turbo-latest',      label: 'Qwen Turbo' },
+    { id: 'qwen3-coder-plus',       label: 'Qwen3 Coder Plus' },
+    { id: 'qwen-long',              label: 'Qwen Long' },
+    { id: 'qwen2-72b-instruct',     label: 'Qwen2 72B' },
+    { id: 'qwen2-7b-instruct',      label: 'Qwen2 7B' },
+    { id: 'qwen-v1-max',            label: 'Qwen V1 Max' },
+    { id: 'qwen-v1-plus',           label: 'Qwen V1 Plus' },
+  ]},
+  { label: 'Kimi', models: [
+    { id: 'kimi-k2-0711-preview',   label: 'Kimi K2' },
+  ]},
+  { label: 'Yi (零一万物)', models: [
+    { id: 'yi-large',               label: 'Yi Large' },
+    { id: 'yi-medium',              label: 'Yi Medium' },
+    { id: 'yi-spark',               label: 'Yi Spark' },
+    { id: 'yi-34b-chat',            label: 'Yi 34B Chat' },
+  ]},
+  { label: 'GLM (智谱)', models: [
+    { id: 'glm-4',                  label: 'GLM-4' },
+    { id: 'glm-3-turbo',            label: 'GLM-3 Turbo' },
+  ]},
+  { label: 'Hunyuan (混元)', models: [
+    { id: 'hunyuan-pro',            label: 'Hunyuan Pro' },
+    { id: 'hunyuan-lite',           label: 'Hunyuan Lite' },
+  ]},
+  { label: 'Ernie (文心)', models: [
+    { id: 'ernie-bot-4',            label: 'Ernie Bot 4' },
+  ]},
+  { label: 'Doubao (豆包)', models: [
+    { id: 'doubao-pro',             label: 'Doubao Pro' },
+  ]},
+  { label: 'Spark (星火)', models: [
+    { id: 'spark-v3.5',             label: 'Spark V3.5' },
+  ]},
+  { label: 'Mistral', models: [
+    { id: 'mistral-large',          label: 'Mistral Large' },
+    { id: 'mixtral-8x7b-instruct',  label: 'Mixtral 8x7B' },
+    { id: 'mixtral-8x22b-instruct', label: 'Mixtral 8x22B' },
+  ]},
+  { label: 'Llama', models: [
+    { id: 'llama-3-70b-instruct',   label: 'Llama 3 70B' },
+    { id: 'llama-3-8b-instruct',    label: 'Llama 3 8B' },
+    { id: 'llama-2-70b-chat',       label: 'Llama 2 70B' },
+  ]},
+  { label: 'Gemma', models: [
+    { id: 'gemma-2-27b-it',         label: 'Gemma 2 27B' },
+    { id: 'gemma-7b-it',            label: 'Gemma 7B' },
+  ]},
+];
+
+let aiGenerating = false;
+let aiAbortCtrl  = null;
+let aiSortedResults = [];  // for fav callbacks
+
+// 字库外字符的兜底对象（确保 UI 始终可渲染）
+function makeCharFallback(char) {
+  return { c: char, py: '—', tone: 0, wx: '？', st: 0, open: 'small', _fallback: true };
+}
+
+// ── renderAITab ──────────────────────────────────────
+function renderAITab() {
+  const mainEl  = document.getElementById('main');
+  const n1 = filtC1.length, n2 = filtC2.length;
+  const savedKey   = localStorage.getItem('ai_api_key')  || AI_DEFAULT_KEY;
+  const savedModel = localStorage.getItem('ai_model')    || AI_DEFAULT_MODEL;
+  const savedCount = localStorage.getItem('ai_count')    || '20';
+
+  const modelOptsHtml = AI_MODEL_GROUPS.map(g =>
+    `<optgroup label="${esc(g.label)}">${
+      g.models.map(m => `<option value="${esc(m.id)}">${esc(m.label)}</option>`).join('')
+    }</optgroup>`
+  ).join('');
+
+  const defaultBazi =
+`公历：2026年4月10日 13:00-15:00
+农历：丙午年 壬辰月 甲寅日 辛未时
+四柱：年柱丙午（火火）| 月柱壬辰（水土）| 日柱甲寅（木木）| 时柱辛未（金土）
+八字五行：木×2  火×2  土×2  金×1  水×1
+五行建议：金水偏弱，名字宜补金或水`;
+
+  const saved = localStorage.getItem('ai_bazi_text');
+  const baziVal = saved || defaultBazi;
+  const savedSurname = localStorage.getItem('ai_surname') || state.surname || '姚';
+  const genDisabled  = (!n1 || !n2) ? 'disabled' : '';
+
+  mainEl.innerHTML = `
+  <div class="ai-wrap">
+    <div class="ai-config-bar">
+      <div class="ai-cfg-group">
+        <label class="ai-cfg-label">模型</label>
+        <select class="ai-model-sel" id="aiModelSel">${modelOptsHtml}</select>
+      </div>
+      <div class="ai-cfg-group" id="aiApiKeyGroup" style="display:none">
+        <label class="ai-cfg-label">API Key</label>
+        <input type="password" class="ai-apikey-input" id="aiApiKey"
+          value="${esc(savedKey)}" placeholder="sk-...">
+      </div>
+      <div class="ai-cfg-group">
+        <label class="ai-cfg-label">数量</label>
+        <select class="ai-model-sel" id="aiCountSel" style="width:72px">
+          <option value="10" ${savedCount==='10'?'selected':''}>10 个</option>
+          <option value="20" ${savedCount==='20'?'selected':''}>20 个</option>
+          <option value="50" ${savedCount==='50'?'selected':''}>50 个</option>
+          <option value="100" ${savedCount==='100'?'selected':''}>100 个</option>
+        </select>
+      </div>
+      <div class="ai-pool-status">
+        <span class="ai-pool-badge ze">名一 ${n1} 字</span>
+        <span class="ai-pool-badge ping">名二 ${n2} 字</span>
+        <button class="ai-adjust-btn" onclick="switchTab('browse')" title="返回浏览页调整筛选条件">调整字池</button>
+      </div>
+      <button class="ai-gen-btn" id="aiGenBtn"
+        onclick="generateAINames()" ${genDisabled}>✦ 生成 ${savedCount} 个名字</button>
+    </div>
+
+    <details class="ai-bazi-card" open>
+      <summary class="ai-bazi-summary">宝宝八字信息（点击展开/收起）</summary>
+      <div class="ai-bazi-body">
+        <div class="ai-bazi-row">
+          <label class="ai-bazi-label">姓氏</label>
+          <input class="ai-bazi-surname" id="aiBaziSurname"
+            maxlength="2" value="${esc(savedSurname)}" placeholder="姚">
+        </div>
+        <div class="ai-bazi-row">
+          <label class="ai-bazi-label">八字信息（发给 AI，可自由编辑）</label>
+          <textarea class="ai-bazi-text" id="aiBaziText"
+            rows="5" spellcheck="false">${esc(baziVal)}</textarea>
+        </div>
+      </div>
+    </details>
+
+    <div class="ai-results" id="aiResults">
+      <div class="ai-idle">
+        <div class="ai-idle-icon">✦</div>
+        <div>配置好信息后，点击「生成名字」开始</div>
+        ${!n1||!n2 ? '<div class="ai-idle-warn">⚠ 候选字池为空，请先在「浏览」页设置筛选条件</div>' : ''}
+      </div>
+    </div>
+  </div>`;
+
+  // restore & bind model
+  const sel = document.getElementById('aiModelSel');
+  sel.value = savedModel;
+  sel.addEventListener('change', () => localStorage.setItem('ai_model', sel.value));
+  document.getElementById('aiApiKey').addEventListener('change', e =>
+    localStorage.setItem('ai_api_key', e.target.value.trim()));
+  document.getElementById('aiBaziSurname').addEventListener('change', e =>
+    localStorage.setItem('ai_surname', e.target.value.trim()));
+  document.getElementById('aiBaziText').addEventListener('change', e =>
+    localStorage.setItem('ai_bazi_text', e.target.value));
+  document.getElementById('aiCountSel').addEventListener('change', e => {
+    localStorage.setItem('ai_count', e.target.value);
+    const btn = document.getElementById('aiGenBtn');
+    if (btn && !aiGenerating) btn.textContent = `✦ 生成 ${e.target.value} 个名字`;
+  });
+}
+
+// ── parseAIResults ───────────────────────────────────
+function parseAIResults(text) {
+  const t = text.trim();
+  // 1. direct parse
+  try { const r = JSON.parse(t); if (Array.isArray(r)) return r; } catch {}
+  // 2. extract array
+  const m = t.match(/\[[\s\S]*\]/);
+  if (m) {
+    try { const r = JSON.parse(m[0]); if (Array.isArray(r)) return r; } catch {}
+    // 3. fix truncated (remove last incomplete object)
+    const fixed = m[0].replace(/,\s*\{[^{}]*$/, ']');
+    try { const r = JSON.parse(fixed); if (Array.isArray(r)) return r; } catch {}
+  }
+  // 4. extract individual complete objects
+  const objs = [];
+  const re = /\{[^{}]*"name"\s*:[^{}]*\}/g;
+  let match;
+  while ((match = re.exec(t)) !== null) {
+    try { objs.push(JSON.parse(match[0])); } catch {}
+  }
+  return objs.length ? objs : null;
+}
+
+// ── renderAITable ─────────────────────────────────────
+function renderAITable(results, surname) {
+  aiSortedResults = [...results].sort((a, b) => (b.score||0) - (a.score||0));
+
+  const rows = aiSortedResults.map((r, i) => {
+    // 去除 LLM 可能在 name 里带上的姓氏前缀
+    let name = (r.name || '').trim();
+    if (surname && name.startsWith(surname)) name = name.slice(surname.length);
+    name = name.slice(0, 2); // 最多两字
+
+    const c1char = name[0] || '';
+    const c2char = name[1] || '';
+    // 字库外字符使用兜底对象，确保始终可收藏和显示
+    const a = allChars.find(c => c.c === c1char) || makeCharFallback(c1char);
+    const b = allChars.find(c => c.c === c2char) || makeCharFallback(c2char);
+    const score  = Math.min(100, Math.max(0, Number(r.score) || 0));
+    const scoreColor = score >= 85 ? '#3D6B4A' : score >= 70 ? '#B8924A' : '#B84A3A';
+    const faved  = (c1char && c2char) ? isFaved(a, b) : false;
+
+    const wxHtml = (c1char && c2char)
+      ? `<span class="ai-char-wx" style="${a._fallback?'background:#eee;color:#888':wxStyle(a.wx)}">${esc(a.wx)}</span>
+         <span class="ai-char-wx" style="${b._fallback?'background:#eee;color:#888':wxStyle(b.wx)}">${esc(b.wx)}</span>`
+      : '';
+
+    const favHtml = (c1char && c2char)
+      ? `<button class="ai-fav-btn ${faved?'saved':''}"
+           onclick="aiToggleFav(${i},this)"
+           title="${faved?'移出收藏':'加入收藏'}">${faved?'♥':'♡'}</button>`
+      : '';
+
+    return `<tr>
+      <td class="ai-td-num">${i+1}</td>
+      <td class="ai-td-name">
+        <span class="ai-name-sur">${esc(surname)}</span><span class="ai-name-chars">${esc(name)}</span>
+        <div style="display:flex;gap:3px;margin-top:3px">${wxHtml}</div>
+      </td>
+      <td class="ai-td-score">
+        <span class="ai-score-badge" style="background:${scoreColor}">${score}</span>
+      </td>
+      <td class="ai-td-text">${esc(r.wx||'')}</td>
+      <td class="ai-td-text">${esc(r.meaning||'')}</td>
+      <td class="ai-td-src">${esc(r.source||'—')}</td>
+      <td class="ai-td-fav">${favHtml}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('aiResults').innerHTML = `
+    <div class="ai-table-header">
+      共生成 <strong>${results.length}</strong> 个名字，按评分排序
+    </div>
+    <div class="ai-table-wrap">
+      <table class="ai-table">
+        <thead><tr>
+          <th>#</th><th>名字</th><th>评分</th>
+          <th>五行分析</th><th>字义意境</th><th>诗词出处</th><th>收藏</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+function aiToggleFav(idx, btn) {
+  const r = aiSortedResults[idx];
+  if (!r) return;
+  const surname = document.getElementById('aiBaziSurname')?.value.trim() || state.surname || '';
+  let name = (r.name || '').trim();
+  if (surname && name.startsWith(surname)) name = name.slice(surname.length);
+  name = name.slice(0, 2);
+  const c1char = name[0] || '';
+  const c2char = name[1] || '';
+  if (!c1char || !c2char) return;
+  const a = allChars.find(c => c.c === c1char) || makeCharFallback(c1char);
+  const b = allChars.find(c => c.c === c2char) || makeCharFallback(c2char);
+  toggleFav(a, b, surname);
+  const faved = isFaved(a, b);
+  btn.textContent = faved ? '♥' : '♡';
+  btn.classList.toggle('saved', faved);
+}
+
+// ── generateAINames ───────────────────────────────────
+async function generateAINames() {
+  if (aiGenerating) {
+    if (aiAbortCtrl) aiAbortCtrl.abort();
+    return;
+  }
+
+  const apiKey  = document.getElementById('aiApiKey')?.value.trim()  || '';
+  const model   = document.getElementById('aiModelSel')?.value        || AI_DEFAULT_MODEL;
+  const surname = document.getElementById('aiBaziSurname')?.value.trim() || '姚';
+  const baziText= document.getElementById('aiBaziText')?.value.trim() || '';
+  const genCount= parseInt(document.getElementById('aiCountSel')?.value || '20', 10);
+
+  if (!filtC1.length || !filtC2.length) {
+    alert('候选字池为空，请先在「浏览」页设置筛选条件'); return;
+  }
+
+  // 超过 300 字随机采样
+  const MAX_POOL = 300;
+  const pool1 = filtC1.length > MAX_POOL
+    ? [...filtC1].sort(()=>Math.random()-.5).slice(0, MAX_POOL)
+    : filtC1;
+  const pool2 = filtC2.length > MAX_POOL
+    ? [...filtC2].sort(()=>Math.random()-.5).slice(0, MAX_POOL)
+    : filtC2;
+  const chars1 = pool1.map(c => c.c).join(' ');
+  const chars2 = pool2.map(c => c.c).join(' ');
+
+  const prompt =
+`你是一位精通中国传统命名学与诗词文化的起名大师。请为以下宝宝推荐${genCount}个好名字。
+
+【宝宝信息】
+姓氏：${surname}
+${baziText}
+
+【候选字池（必须从中选字）】
+名字第一个字必须从以下 ${pool1.length} 个字中选取（空格分隔）：
+${chars1}
+
+名字第二个字必须从以下 ${pool2.length} 个字中选取（空格分隔）：
+${chars2}
+
+【起名要求】
+1. 每个名字由两字组成，第一字来自上方"名一字池"，第二字来自"名二字池"
+2. 根据八字五行，优先选能补充偏弱五行的字
+3. 名字与"${surname}"姓搭配响亮好听，字义美好积极
+4. 尽量选有诗词典故出处的字，在 source 字段注明来源
+5. 避免谐音不雅、寓意消极的搭配
+
+【严格输出格式】
+直接输出 JSON 数组，共${genCount}条，每条格式如下：
+[{"name":"两字名（只含名，不含姓）","score":0到100的整数,"wx":"五行补益简述","meaning":"字义与意境","source":"诗词出处，无则空字符串"},...]
+
+⚠ name 字段只写名字的两个字，不要包含姓氏"${surname}"。
+只输出 JSON 数组，首行 [ 尾行 ]，不要任何额外文字或说明。`;
+
+  // 更新 UI 状态
+  aiGenerating  = true;
+  aiAbortCtrl   = new AbortController();
+  const genBtn  = document.getElementById('aiGenBtn');
+  genBtn.textContent  = '⏹ 停止生成';
+  genBtn.classList.add('stop');
+
+  document.getElementById('aiResults').innerHTML = `
+    <div class="ai-streaming">
+      <div class="ai-streaming-header">
+        <div class="spinner" style="width:20px;height:20px;border-width:2px"></div>
+        <span id="aiStreamStatus">正在连接 ${esc(model)}…</span>
+        <span id="aiStreamCount" class="ai-stream-count"></span>
+      </div>
+      <div class="ai-stream-preview" id="aiStreamPreview"></div>
+    </div>`;
+
+  try {
+    const resp = await fetch('/api/ai-names', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ api_key: apiKey, model, prompt }),
+      signal: aiAbortCtrl.signal,
+    });
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+
+    const reader  = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let sseBuffer   = '';
+    let fullContent = '';
+
+    outer: while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      sseBuffer += decoder.decode(value, { stream: true });
+      const lines = sseBuffer.split('\n');
+      sseBuffer = lines.pop(); // incomplete line
+
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const data = line.slice(6).trim();
+        if (data === '[DONE]') break outer;
+        try {
+          const obj = JSON.parse(data);
+          if (obj.error) throw new Error(obj.error);
+          const content = obj.choices?.[0]?.delta?.content;
+          if (content) {
+            fullContent += content;
+            const cnt = (fullContent.match(/"name"\s*:/g) || []).length;
+            const statusEl  = document.getElementById('aiStreamStatus');
+            const countEl   = document.getElementById('aiStreamCount');
+            const previewEl = document.getElementById('aiStreamPreview');
+            if (statusEl)  statusEl.textContent  = `正在生成 (${cnt} / ${genCount})…`;
+            if (countEl)   countEl.textContent   = `已生成 ${cnt} 个`;
+            if (previewEl) previewEl.textContent = fullContent.slice(-200);
+          }
+        } catch(e) {
+          if (e.name === 'AbortError') break outer;
+          if (e.message.startsWith('LLM API')) throw e;
+          // 忽略部分 SSE 数据解析错误
+        }
+      }
+    }
+
+    const parsed = parseAIResults(fullContent);
+    if (parsed && parsed.length > 0) {
+      renderAITable(parsed, surname);
+    } else {
+      document.getElementById('aiResults').innerHTML = `
+        <div class="ai-error">
+          <strong>解析失败</strong>：AI 返回的内容无法解析为名字列表。
+          <details style="margin-top:8px">
+            <summary style="cursor:pointer;font-size:11px;color:var(--ink3)">查看原始输出</summary>
+            <pre class="ai-raw-output">${esc(fullContent)}</pre>
+          </details>
+        </div>`;
+    }
+  } catch(e) {
+    if (e.name === 'AbortError') {
+      document.getElementById('aiResults').innerHTML =
+        `<div class="ai-idle"><div class="ai-idle-icon">⏸</div><div>已停止生成</div></div>`;
+    } else {
+      document.getElementById('aiResults').innerHTML =
+        `<div class="ai-error">生成失败：${esc(e.message)}</div>`;
+    }
+  } finally {
+    aiGenerating = false;
+    const btn2 = document.getElementById('aiGenBtn');
+    if (btn2) {
+      btn2.textContent = '✦ 生成 100 个名字';
+      btn2.classList.remove('stop');
+    }
+  }
+}
 </script>
 </body>
 </html>
