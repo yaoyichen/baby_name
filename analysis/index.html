@@ -185,12 +185,21 @@ main{flex:1;overflow-y:auto;padding:18px 22px 48px;display:flex;flex-direction:c
 .sancai-verdict.ke{background:#FAECEB;color:#7A2518;border-left:3px solid #B84A3A}
 .sancai-verdict.mix{background:#FBF3E4;color:#5C4010;border-left:3px solid #B8924A}
 .wuge-no-sur{font-size:12px;color:var(--ink3);text-align:center;padding:12px;background:var(--bg);border-radius:8px;border:1px dashed var(--border)}
+.wuge-single-hint{font-size:11px;color:#3A5F8B;background:#eef3fb;border-radius:6px;padding:5px 10px;border-left:3px solid #3A5F8B;line-height:1.5}
 
 /* 收藏夹专属 */
 .fav-header{display:flex;align-items:center;justify-content:space-between;padding:4px 0}
 .fav-title{font-family:'Noto Serif SC',serif;font-size:16px;color:var(--ink)}
 .clear-fav-btn{font-size:12px;color:var(--ink3);background:none;border:1px solid var(--border);border-radius:6px;padding:3px 10px;cursor:pointer;transition:all .2s}
 .clear-fav-btn:hover{border-color:#B84A3A;color:#B84A3A}
+/* 收藏夹：五格评分徽章 */
+.fav-score-pill{display:inline-flex;align-items:center;gap:5px;margin-top:8px;padding:3px 8px 3px 4px;border-radius:20px;background:var(--bg);border:1px solid var(--border);cursor:default;font-size:11px;font-weight:600;transition:border-color .15s,box-shadow .15s;user-select:none}
+.fav-score-pill:hover{border-color:currentColor;box-shadow:0 0 0 2px color-mix(in srgb,currentColor 12%,transparent)}
+.fav-score-ring{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0}
+/* 五格 hover 浮层 */
+.wuge-hover-popup{position:fixed;z-index:9999;width:400px;max-width:calc(100vw - 24px);background:var(--card);border:1px solid var(--border);border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,.18);padding:0;pointer-events:auto;opacity:0;transform:translateY(4px);transition:opacity .15s,transform .15s;overflow:hidden}
+.wuge-hover-popup.visible{opacity:1;transform:translateY(0)}
+.wuge-hover-popup .wuge-section{border:none;border-radius:0;padding:14px 16px}
 
 /* 黑名单 */
 .ban-add-row{display:flex;gap:6px}
@@ -458,7 +467,8 @@ details[open] .ai-bazi-summary::before{transform:rotate(90deg)}
 </div>
 
 <script>
-const DATA_URL  = '../data/all_chars.json';
+const DATA_URL        = '../data/all_chars.json';
+const LOOKUP_DATA_URL = '../data/lookup_chars.json';
 const PAGE_SIZE = 60;
 const FAV_KEY   = 'baby_name_favorites';
 const BAN_KEY   = 'baby_name_blacklist';
@@ -473,6 +483,8 @@ const WX_COLOR   = {
 
 // ── 状态 ────────────────────────────────────────────
 let allChars = [], filtC1 = [], filtC2 = [];
+let lookupChars = [];          // 扩展查名字库（all_chars 之外的字）
+let lookupMap   = new Map();   // char → entry，查名快速检索
 let page = 1, currentTab = 'browse';
 
 const state = {
@@ -495,7 +507,7 @@ function loadFavs() {
 }
 function saveFavs(arr) { localStorage.setItem(FAV_KEY, JSON.stringify(arr)); }
 
-function favKey(a, b) { return `${a.c}|${b.c}`; }
+function favKey(a, b) { return b ? `${a.c}|${b.c}` : a.c; }
 
 function isFaved(a, b) {
   return loadFavs().some(f => f.k === favKey(a,b));
@@ -680,13 +692,34 @@ function estimateTotal() {
 
 // ── 渲染单卡 ────────────────────────────────────────
 function renderCard(a, b, surname, favBtnVisible=true) {
+  const isSingle = b === null || b === undefined;
   const [fg1,bg1]=WX_COLOR[a.wx]||['#888','#eee'];
-  const [fg2,bg2]=WX_COLOR[b.wx]||['#888','#eee'];
+  const [fg2,bg2]=isSingle ? ['#888','#eee'] : (WX_COLOR[b.wx]||['#888','#eee']);
   const sHTML = surname ? `<span class="name-surname">${esc(surname)}</span>` : '';
-  const k = favKey(a,b);
-  const faved = isFaved(a,b);
+  const k = favKey(a, isSingle ? null : b);
+  const faved = isFaved(a, isSingle ? null : b);
+  const openLabel = o => o==='large'?'大开口':'小开口';
 
-  const src = a.sent ? a : (b.sent ? b : null);
+  const charBadge = ch =>
+    ch._fallback ? '<span style="font-size:10px;color:#B84A3A;background:#FAECEB;padding:1px 5px;border-radius:4px">字库外</span>'
+    : ch._ext    ? '<span style="font-size:10px;color:#5a7aab;background:#eef3fb;padding:1px 5px;border-radius:4px">仅查阅</span>'
+    : '';
+
+  const attrCard = (ch, fg, bg) => `<div class="attr-card" style="background:${bg}">
+        <span class="attr-char" style="color:${fg}">${esc(ch.c)}</span>
+        <div class="attr-detail">
+          <span class="wx-badge" style="${wxStyle(ch.wx)}">${esc(ch.wx)}</span>
+          ${ch.tone?`<span class="tone-badge">${TONE_NAMES[ch.tone]||ch.tone}声</span>`:''}
+          ${ch.st?`<span class="stroke-badge">${ch.st}画</span>`:''}
+          <span class="open-badge">${openLabel(ch.open)}</span>
+          ${ch.multi ? `<span class="multi-badge" title="${(ch.pys||[]).map(p=>p.py+(p.tone?'('+p.tone+'声)':'')).join(' / ')}">多音</span>` : ''}
+          ${charBadge(ch)}
+          <button class="ban-char-btn" onclick="addBan('${esc(ch.c)}')" title="屏蔽「${esc(ch.c)}」字">⊘ 屏蔽</button>
+        </div>
+        ${ch.multi&&ch.pys ? `<div class="multi-pys">${ch.pys.map(p=>`<span>${esc(p.py)}<sub>${p.tone||'轻'}</sub></span>`).join('')}</div>` : ''}
+      </div>`;
+
+  const src = a.sent ? a : ((!isSingle && b.sent) ? b : null);
   const poemHTML = src
     ? `<div class="poem-block">
         <div class="poem-sent">「${hlSent(src.sent, src===a?a.c:b.c)}」</div>
@@ -697,43 +730,18 @@ function renderCard(a, b, surname, favBtnVisible=true) {
        </div>`
     : `<div class="poem-block"><span class="no-poem">暂无诗文来源</span></div>`;
 
-  const openLabel = o => o==='large'?'大开口':'小开口';
-
+  const bJson = isSingle ? 'null' : JSON.stringify(b).replace(/"/g,'&quot;');
   return `<div class="card">
     ${favBtnVisible?`<button class="fav-btn ${faved?'saved':''}" data-k="${esc(k)}"
-      onclick="toggleFav(${JSON.stringify(a).replace(/"/g,'&quot;')},${JSON.stringify(b).replace(/"/g,'&quot;')},${JSON.stringify(surname||'').replace(/"/g,'&quot;')})"
+      onclick="toggleFav(${JSON.stringify(a).replace(/"/g,'&quot;')},${bJson},${JSON.stringify(surname||'').replace(/"/g,'&quot;')})"
       title="${faved?'移出收藏':'加入收藏'}">${faved?'♥':'♡'}</button>`:''}
     <div class="name-row">
-      ${sHTML}<span class="name-chars">${esc(a.c)}${esc(b.c)}</span>
-      <div class="name-py">${esc(a.py)}<br>${esc(b.py)}</div>
+      ${sHTML}<span class="name-chars">${esc(a.c)}${isSingle?'':`${esc(b.c)}`}</span>
+      <div class="name-py">${esc(a.py)}${isSingle?'':`<br>${esc(b.py)}`}</div>
     </div>
     <div class="attrs">
-      <div class="attr-card" style="background:${bg1}">
-        <span class="attr-char" style="color:${fg1}">${esc(a.c)}</span>
-        <div class="attr-detail">
-          <span class="wx-badge" style="${wxStyle(a.wx)}">${esc(a.wx)}</span>
-          ${a.tone?`<span class="tone-badge">${TONE_NAMES[a.tone]||a.tone}声</span>`:''}
-          ${a.st?`<span class="stroke-badge">${a.st}画</span>`:''}
-          <span class="open-badge">${openLabel(a.open)}</span>
-          ${a.multi ? `<span class="multi-badge" title="${(a.pys||[]).map(p=>p.py+(p.tone?'('+p.tone+'声)':'')).join(' / ')}">多音</span>` : ''}
-          ${a._fallback?'<span style="font-size:10px;color:#B8924A;background:#FBF3E4;padding:1px 5px;border-radius:4px">字库外</span>':''}
-          <button class="ban-char-btn" onclick="addBan('${esc(a.c)}')" title="屏蔽「${esc(a.c)}」字">⊘ 屏蔽</button>
-        </div>
-        ${a.multi&&a.pys ? `<div class="multi-pys">${a.pys.map(p=>`<span>${esc(p.py)}<sub>${p.tone||'轻'}</sub></span>`).join('')}</div>` : ''}
-      </div>
-      <div class="attr-card" style="background:${bg2}">
-        <span class="attr-char" style="color:${fg2}">${esc(b.c)}</span>
-        <div class="attr-detail">
-          <span class="wx-badge" style="${wxStyle(b.wx)}">${esc(b.wx)}</span>
-          ${b.tone?`<span class="tone-badge">${TONE_NAMES[b.tone]||b.tone}声</span>`:''}
-          ${b.st?`<span class="stroke-badge">${b.st}画</span>`:''}
-          <span class="open-badge">${openLabel(b.open)}</span>
-          ${b.multi ? `<span class="multi-badge" title="${(b.pys||[]).map(p=>p.py+(p.tone?'('+p.tone+'声)':'')).join(' / ')}">多音</span>` : ''}
-          ${b._fallback?'<span style="font-size:10px;color:#B8924A;background:#FBF3E4;padding:1px 5px;border-radius:4px">字库外</span>':''}
-          <button class="ban-char-btn" onclick="addBan('${esc(b.c)}')" title="屏蔽「${esc(b.c)}」字">⊘ 屏蔽</button>
-        </div>
-        ${b.multi&&b.pys ? `<div class="multi-pys">${b.pys.map(p=>`<span>${esc(p.py)}<sub>${p.tone||'轻'}</sub></span>`).join('')}</div>` : ''}
-      </div>
+      ${attrCard(a, fg1, bg1)}
+      ${isSingle ? '' : attrCard(b, fg2, bg2)}
     </div>
     ${poemHTML}
   </div>`;
@@ -842,9 +850,29 @@ function renderFavorites() {
     mainEl.innerHTML=`<div class="empty"><div class="big">♡</div>收藏夹还是空的<br>在浏览时点击卡片右上角的 ♡ 即可收藏</div>`;
     return;
   }
-  const cards = favs.slice().reverse().map(f =>
-    renderCard(f.a, f.b, f.surname||state.surname, true)
-  ).join('');
+  const cards = favs.slice().reverse().map(f => {
+    const cardHtml = renderCard(f.a, f.b, f.surname||state.surname, true);
+    // 计算五格评分（需要姓氏、两字均在 allChars 且有有效笔画数）
+    const surCh   = (f.surname||state.surname||'').charAt(0);
+    const surData = surCh ? allChars.find(c => c.c === surCh) : null;
+    const isSingleFav = !f.b;
+    const canCalc = surData && f.a && f.a.st && !f.a._fallback
+                    && (isSingleFav || (f.b && f.b.st && !f.b._fallback));
+    if (!canCalc) return cardHtml;
+
+    const {tian,ren,di,zong,wai} = calcWuGe(surData.st, f.a.st, isSingleFav ? null : f.b.st);
+    const score = wugeScore(tian, ren, di, zong, wai);
+    const scoreColor = score>=85?'#3D6B4A':score>=70?'#3A5F8B':score>=55?'#B8924A':'#B84A3A';
+    const scoreLabel = score>=85?'上吉':score>=70?'吉':score>=55?'平':score<40?'大凶':'凶';
+    const wugeHtml  = renderWuGe(surCh, f.a, isSingleFav ? null : f.b);
+
+    // 将评分徽章和隐藏浮层数据插入到 </div> 闭合标签之前（name-card 结尾）
+    const pill = `<div class="fav-score-pill" style="color:${scoreColor}">
+        <span class="fav-score-ring" style="background:${scoreColor}">${score}</span>${scoreLabel} · 五格三才
+      </div>
+      <div class="wuge-popup-data" hidden>${wugeHtml}</div>`;
+    return cardHtml.replace(/(<\/div>\s*)$/, pill + '$1');
+  }).join('');
   mainEl.innerHTML=`
     <div class="fav-header">
       <span class="fav-title">已收藏 ${favs.length} 个名字</span>
@@ -870,6 +898,7 @@ function goPage(p) {
 // ── tab 切换 ─────────────────────────────────────────
 function switchTab(tab) {
   currentTab = tab;
+  window._hideWugePopup && window._hideWugePopup();
   document.getElementById('tabBrowse').classList.toggle('active', tab==='browse');
   document.getElementById('tabFav').classList.toggle('active', tab==='fav');
   document.getElementById('tabLookup').classList.toggle('active', tab==='lookup');
@@ -930,13 +959,20 @@ function _wxRel(from, to) {
   return 'neutral';
 }
 
-function calcWuGe(surSt, c1St, c2St) {
+function calcWuGe(surSt, c1St, c2St = null) {
   const tian = surSt + 1;
   const ren  = surSt + c1St;
+  if (c2St === null) {
+    // 单字名：假添一数规则
+    const di   = c1St + 1;       // 名字 + 1
+    const zong = surSt + c1St;   // = 人格
+    const wai  = 2;              // 1+1，固定为2（木）
+    return {tian, ren, di, zong, wai, single: true};
+  }
   const di   = c1St  + c2St;
   const zong = surSt + c1St + c2St;
-  const wai  = c2St  + 1;          // = zong - ren + 1
-  return {tian, ren, di, zong, wai};
+  const wai  = c2St  + 1;
+  return {tian, ren, di, zong, wai, single: false};
 }
 
 function wugeScore(tian, ren, di, zong, wai) {
@@ -958,7 +994,8 @@ function wugeScore(tian, ren, di, zong, wai) {
   return Math.min(100, Math.max(0, Math.round(base + bonus)));
 }
 
-function renderWuGe(surCh, a, b) {
+function renderWuGe(surCh, a, b = null) {
+  const isSingle = b === null;
   const charMap = Object.fromEntries(allChars.map(c=>[c.c,c]));
   if (!surCh) {
     return `<div class="wuge-section">
@@ -966,14 +1003,16 @@ function renderWuGe(surCh, a, b) {
       <div class="wuge-no-sur">请在上方输入姓氏以计算五格三才</div>
     </div>`;
   }
-  const surData = charMap[surCh];
+  const surData = charMap[surCh] || lookupMap.get(surCh);
   if (!surData) {
     return `<div class="wuge-section">
       <div class="wuge-header"><span class="wuge-title">五格三才</span></div>
       <div class="wuge-no-sur">姓氏「${esc(surCh)}」不在字库，无法计算笔画</div>
     </div>`;
   }
-  const surSt = surData.st, c1St = a.st, c2St = b.st;
+  const surSt = surData.st;
+  const c1St  = a.st;
+  const c2St  = isSingle ? null : b.st;
   const {tian, ren, di, zong, wai} = calcWuGe(surSt, c1St, c2St);
   const score = wugeScore(tian, ren, di, zong, wai);
 
@@ -986,16 +1025,26 @@ function renderWuGe(surCh, a, b) {
     const r = _w81(n), cls = ['中','ji','xiong'][r];
     const rating = _WUGE_RATING[r];
     const desc = _WUGE_DESC[label]||'';
+    let strokesLabel;
+    if (isSingle) {
+      strokesLabel =
+        label==='天格' ? `${esc(surCh)}+1` :
+        label==='人格' ? `${esc(surCh)}+${esc(a.c)}` :
+        label==='地格' ? `${esc(a.c)}+1（假添）` :
+        label==='总格' ? `${esc(surCh)}+${esc(a.c)}` :
+        `1+1（固定）`;
+    } else {
+      strokesLabel =
+        label==='天格' ? `${esc(surCh)}+1` :
+        label==='人格' ? `${esc(surCh)}+${esc(a.c)}` :
+        label==='地格' ? `${esc(a.c)}+${esc(b.c)}` :
+        label==='总格' ? `${esc(surCh)}+${esc(a.c)}+${esc(b.c)}` :
+        `${esc(b.c)}+1`;
+    }
     return `<div class="wuge-cell ${cls}${isMain?' ren':''}">
       <div class="wuge-cell-label">${label}</div>
       <div class="wuge-cell-num">${n}</div>
-      <div class="wuge-cell-strokes">${
-        label==='天格'?`${esc(surCh)}+1`:
-        label==='人格'?`${esc(surCh)}+${esc(a.c)}`:
-        label==='地格'?`${esc(a.c)}+${esc(b.c)}`:
-        label==='总格'?`${esc(surCh)}+${esc(a.c)}+${esc(b.c)}`:
-        `${esc(b.c)}+1`
-      }</div>
+      <div class="wuge-cell-strokes">${strokesLabel}</div>
       <div class="wuge-cell-rating">${rating}</div>
       <div class="wuge-cell-desc">${esc(desc)}</div>
     </div>`;
@@ -1004,13 +1053,11 @@ function renderWuGe(surCh, a, b) {
   // 三才
   const wTian = _digitWx(tian), wRen = _digitWx(ren), wDi = _digitWx(di);
   const r1 = _wxRel(wTian, wRen), r2 = _wxRel(wRen, wDi);
-  // 三才判断：相生包含双向（我生对方 / 对方生我），相克同理
   const isSheng = r => r==='sheng'||r==='bei_sheng';
   const isKe    = r => r==='ke'||r==='bei_ke';
   const arrowCls1 = isSheng(r1)?'sheng':isKe(r1)?'ke':'tong';
   const arrowCls2 = isSheng(r2)?'sheng':isKe(r2)?'ke':'tong';
   const arrowChar = {sheng:'→',ke:'⇢',tong:'＝'};
-  // 显示实际相生方向的标注（如"金生水"而非"水生金"）
   function shengLabel(from, to) {
     if (_WX_SHENG[from]===to) return `${from}生${to}`;
     if (_WX_SHENG[to]===from) return `${to}生${from}`;
@@ -1039,17 +1086,24 @@ function renderWuGe(surCh, a, b) {
     </div>`;
   }
 
+  const nameLabel  = isSingle ? `${esc(surCh)}${esc(a.c)}` : `${esc(surCh)}${esc(a.c)}${esc(b.c)}`;
+  const strokesSum = isSingle ? `${surSt}+${c1St}` : `${surSt}+${c1St}+${c2St}`;
+  const singleBadge = isSingle
+    ? `<span style="font-size:10px;padding:1px 6px;border-radius:4px;background:#eef3fb;color:#3A5F8B;font-weight:600;letter-spacing:.04em">单字名</span>`
+    : '';
+
   return `<div class="wuge-section">
     <div class="wuge-header">
-      <span class="wuge-title">五格三才 · 数理分析</span>
+      <span class="wuge-title">五格三才 · 数理分析 ${singleBadge}</span>
       <div class="wuge-score-badge">
         <div>
-          <div class="wuge-score-label">${esc(surCh)}${esc(a.c)}${esc(b.c)}<br>笔画 ${surSt}+${c1St}+${c2St}</div>
+          <div class="wuge-score-label">${nameLabel}<br>笔画 ${strokesSum}</div>
         </div>
         <div class="wuge-score-ring" style="background:${scoreColor}" title="综合评分">${score}</div>
         <div style="font-size:12px;font-weight:700;color:${scoreColor}">${scoreLabel}</div>
       </div>
     </div>
+    ${isSingle ? `<div class="wuge-single-hint">单字名：人格=总格（双倍权重），外格固定为2（木·中）</div>` : ''}
     <div class="wuge-grid">
       ${cell('天格',tian)} ${cell('人格',ren,true)} ${cell('地格',di)} ${cell('总格',zong)} ${cell('外格',wai)}
     </div>
@@ -1078,9 +1132,9 @@ function renderLookup() {
         <input class="lookup-surname" id="lookupSurname" maxlength="1"
           value="${esc(surname)}" placeholder="姓" title="姓氏（可选）">
         <input class="lookup-name-input" id="lookupInput" maxlength="2"
-          placeholder="名字" autocomplete="off">
+          placeholder="名（1-2字）" autocomplete="off">
       </div>
-      <div class="lookup-hint">输入两个汉字，自动显示属性</div>
+      <div class="lookup-hint">输入 1-2 个汉字，自动显示属性；单字则按单字名规则计算五格</div>
       <div class="lookup-result" id="lookupResult"></div>
     </div>`;
 
@@ -1099,26 +1153,28 @@ function doLookup() {
   if (!res) return;
 
   const chars = [...raw].filter(c => /[\u4e00-\u9fff]/.test(c));
-  if (chars.length < 2) { res.innerHTML = ''; return; }
+  if (chars.length < 1) { res.innerHTML = ''; return; }
 
-  const c1 = chars[0], c2 = chars[1];
+  const isSingle = chars.length === 1;
+  const c1 = chars[0], c2 = isSingle ? null : chars[1];
   const charMap = Object.fromEntries(allChars.map(c => [c.c, c]));
-  const aRaw = charMap[c1], bRaw = charMap[c2];
-  // 字库外字符用兜底对象，仍可显示卡片（五行/笔画显示"？"）
+  const aRaw = charMap[c1];
+  const bRaw = isSingle ? null : charMap[c2];
   const a = aRaw || makeCharFallback(c1);
-  const b = bRaw || makeCharFallback(c2);
+  const b = isSingle ? null : (bRaw || makeCharFallback(c2));
 
   const warns = [];
   if (!aRaw) warns.push(`「${c1}」不在五行字库中，属性为估算`);
-  if (!bRaw) warns.push(`「${c2}」不在五行字库中，属性为估算`);
+  if (!isSingle && !bRaw) warns.push(`「${c2}」不在五行字库中，属性为估算`);
 
   let html = '';
   if (warns.length) {
     html += `<div class="lookup-warn">⚠ ${warns.join('；')}</div>`;
   }
-  // 始终显示卡片；五格三才需要有效笔画数，仅在两字均在字库时显示
   html += renderCard(a, b, sur, true);
-  if (aRaw && bRaw) {
+  // 五格三才：需要名字首字在字库（有效笔画数）
+  const canWuge = aRaw && (isSingle || bRaw);
+  if (canWuge) {
     html += renderWuGe(sur, a, b);
   }
   res.innerHTML = html;
@@ -1251,9 +1307,16 @@ document.getElementById('resetBtn').addEventListener('click',()=>{
 // ── 加载 ─────────────────────────────────────────────
 async function init() {
   try {
-    const res = await fetch(DATA_URL);
+    const [res, resLookup] = await Promise.all([
+      fetch(DATA_URL),
+      fetch(LOOKUP_DATA_URL).catch(() => null),
+    ]);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     allChars = await res.json();
+    if (resLookup && resLookup.ok) {
+      lookupChars = await resLookup.json();
+      lookupChars.forEach(e => lookupMap.set(e.c, e));
+    }
     const ze=allChars.filter(c=>c.tone>=3).length, ping=allChars.filter(c=>c.tone<=2).length;
     document.getElementById('totalPill').textContent=`全库 ${allChars.length.toLocaleString()} 字`;
     document.getElementById('loading').remove();
@@ -1282,6 +1345,83 @@ async function init() {
 }
 
 init();
+
+// ══════════════════════════════════════════════════════════════
+// 五格三才 Hover 浮层（收藏夹专用）
+// ══════════════════════════════════════════════════════════════
+(function () {
+  let popup = null;
+  let hideTimer = null;
+
+  function ensurePopup() {
+    if (!popup) {
+      popup = document.createElement('div');
+      popup.className = 'wuge-hover-popup';
+      document.body.appendChild(popup);
+      // 鼠标移入浮层本身时保持显示
+      popup.addEventListener('mouseenter', () => {
+        clearTimeout(hideTimer);
+        popup.classList.add('visible');
+      });
+      popup.addEventListener('mouseleave', () => scheduleHide());
+    }
+    return popup;
+  }
+
+  function scheduleHide() {
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(() => popup && popup.classList.remove('visible'), 80);
+  }
+
+  function positionPopup(anchor) {
+    const r = anchor.getBoundingClientRect();
+    const pw = 400, gap = 8;
+    const vw = window.innerWidth, vh = window.innerHeight;
+
+    // 水平：优先向右展开，超出则向左
+    let left = r.left;
+    if (left + pw > vw - 8) left = Math.max(8, r.right - pw);
+
+    // 垂直：优先在元素下方，超出则在上方
+    let top = r.bottom + gap;
+    const ph = popup.offsetHeight || 340;
+    if (top + ph > vh - 8) top = Math.max(8, r.top - ph - gap);
+
+    popup.style.left = left + 'px';
+    popup.style.top  = top  + 'px';
+  }
+
+  document.addEventListener('mouseover', e => {
+    const pill = e.target.closest('.fav-score-pill');
+    if (!pill) return;
+    const dataEl = pill.parentElement && pill.parentElement.querySelector('.wuge-popup-data');
+    if (!dataEl) return;
+    clearTimeout(hideTimer);
+    const p = ensurePopup();
+    p.innerHTML = dataEl.innerHTML;
+    p.classList.remove('visible');           // 先隐藏触发 reflow，让 transition 生效
+    requestAnimationFrame(() => {
+      positionPopup(pill);
+      p.classList.add('visible');
+    });
+  });
+
+  document.addEventListener('mouseout', e => {
+    if (!e.target.closest('.fav-score-pill')) return;
+    if (e.relatedTarget && (
+      e.relatedTarget.closest('.fav-score-pill') ||
+      e.relatedTarget.closest('.wuge-hover-popup')
+    )) return;
+    scheduleHide();
+  });
+
+  // 滚动/resize 时隐藏
+  window.addEventListener('scroll', () => popup && popup.classList.remove('visible'), true);
+  window.addEventListener('resize', () => popup && popup.classList.remove('visible'));
+
+  // 暴露给 switchTab 使用
+  window._hideWugePopup = () => popup && popup.classList.remove('visible');
+}());
 
 // ══════════════════════════════════════════════════════════════
 // AI 起名模块
@@ -1408,6 +1548,10 @@ let aiSortedResults = [];  // for fav callbacks
 
 // 字库外字符的兜底对象（确保 UI 始终可渲染）
 function makeCharFallback(char) {
+  // 优先从扩展查名字库取真实属性
+  const ext = lookupMap.get(char);
+  if (ext) return Object.assign({}, ext, { _ext: true });
+  // 完全未知时返回占位对象
   return { c: char, py: '—', tone: 0, wx: '？', st: 0, open: 'small', _fallback: true };
 }
 
@@ -1551,9 +1695,10 @@ function renderAITable(results, surname) {
     const scoreColor = score >= 85 ? '#3D6B4A' : score >= 70 ? '#B8924A' : '#B84A3A';
     const faved  = (c1char && c2char) ? isFaved(a, b) : false;
 
+    const _wxSt = (ch) => ch._fallback ? 'background:#eee;color:#888' : wxStyle(ch.wx);
     const wxHtml = (c1char && c2char)
-      ? `<span class="ai-char-wx" style="${a._fallback?'background:#eee;color:#888':wxStyle(a.wx)}">${esc(a.wx)}</span>
-         <span class="ai-char-wx" style="${b._fallback?'background:#eee;color:#888':wxStyle(b.wx)}">${esc(b.wx)}</span>`
+      ? `<span class="ai-char-wx" style="${_wxSt(a)}">${esc(a.wx)}</span>
+         <span class="ai-char-wx" style="${_wxSt(b)}">${esc(b.wx)}</span>`
       : '';
 
     const favHtml = (c1char && c2char)

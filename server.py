@@ -25,8 +25,12 @@ class Handler(SimpleHTTPRequestHandler):
         super().__init__(*args, directory=str(ROOT), **kwargs)
 
     def do_GET(self):
-        if urlparse(self.path).path == "/api/blacklist":
+        p = urlparse(self.path).path
+        if p == "/api/blacklist":
             self._send_json(self._read_blacklist())
+        elif p == "/favicon.ico":
+            self.send_response(204)
+            self.end_headers()
         else:
             super().do_GET()
 
@@ -146,7 +150,8 @@ class Handler(SimpleHTTPRequestHandler):
             _write_err(str(e))
 
     def log_message(self, fmt, *args):
-        if "/api/" in (args[0] if args else ""):
+        first = str(args[0]) if args else ""
+        if "/api/" in first:
             print(f"[API] {fmt % args}")
 
 
