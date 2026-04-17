@@ -86,7 +86,7 @@ main{flex:1;overflow-y:auto;padding:18px 22px 48px;display:flex;flex-direction:c
 .fav-btn{position:absolute;top:12px;right:12px;background:none;border:none;font-size:18px;cursor:pointer;padding:2px;line-height:1;opacity:.5;transition:opacity .2s,transform .2s}
 .fav-btn:hover{opacity:1;transform:scale(1.2)}
 .fav-btn.saved{opacity:1;color:var(--gold)}
-.name-row{display:flex;align-items:baseline;padding-right:28px}
+.name-row{display:flex;align-items:center;padding-right:28px;flex-wrap:wrap;gap:4px}
 .name-surname{font-family:'Noto Serif SC',serif;font-size:26px;font-weight:300;color:var(--ink3)}
 .name-chars{font-family:'Noto Serif SC',serif;font-size:30px;font-weight:600;color:var(--ink);letter-spacing:.08em}
 .name-py{margin-left:auto;font-size:11px;color:var(--ink3);line-height:1.6;text-align:right}
@@ -165,9 +165,11 @@ main{flex:1;overflow-y:auto;padding:18px 22px 48px;display:flex;flex-direction:c
 .wuge-cell-strokes{font-size:10px;color:var(--ink3)}
 .wuge-cell-rating{font-size:11px;font-weight:600;padding:1px 7px;border-radius:10px}
 .wuge-cell-desc{font-size:9px;color:var(--ink3);text-align:center;line-height:1.4;margin-top:1px}
-.wuge-cell.ji{border-color:#c8dfc8;background:#f0f7f0}.wuge-cell.ji .wuge-cell-rating{background:#3D6B4A;color:#fff}
-.wuge-cell.xiong{border-color:#e8b8b3;background:#FAECEB}.wuge-cell.xiong .wuge-cell-rating{background:#B84A3A;color:#fff}
-.wuge-cell.zhong{border-color:#e0d5c0;background:#f9f5ee}.wuge-cell.zhong .wuge-cell-rating{background:#B8924A;color:#fff}
+.wuge-cell.daji{border-color:#81c784;background:#e8f5e9}.wuge-cell.daji .wuge-cell-rating{background:#2E7D32;color:#fff}
+.wuge-cell.ji{border-color:#90caf9;background:#e3f2fd}.wuge-cell.ji .wuge-cell-rating{background:#0277BD;color:#fff}
+.wuge-cell.zhong{border-color:#e0d5c0;background:#f9f5ee}.wuge-cell.zhong .wuge-cell-rating{background:#F57C00;color:#fff}
+.wuge-cell.xiong{border-color:#e8b8b3;background:#FAECEB}.wuge-cell.xiong .wuge-cell-rating{background:#C62828;color:#fff}
+.wuge-cell.daxiong{border-color:#ef9a9a;background:#ffebee}.wuge-cell.daxiong .wuge-cell-rating{background:#b71c1c;color:#fff}
 .wuge-cell.ren{border-left:3px solid var(--green)}
 .sancai-section{display:flex;flex-direction:column;gap:8px}
 .sancai-title{font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--ink3)}
@@ -192,12 +194,17 @@ main{flex:1;overflow-y:auto;padding:18px 22px 48px;display:flex;flex-direction:c
 .fav-search-input{height:30px;padding:0 10px;border:1px solid var(--border);border-radius:8px;background:var(--card);font-size:13px;color:var(--ink);outline:none;transition:border-color .2s;width:160px}
 .fav-search-input:focus{border-color:var(--green)}
 .fav-search-input::placeholder{color:var(--ink3)}
+.fav-sort-sel{height:30px;padding:0 8px;border:1px solid var(--border);border-radius:8px;background:var(--card);font-size:13px;color:var(--ink);outline:none;cursor:pointer;transition:border-color .2s}
+.fav-sort-sel:focus{border-color:var(--green)}
+.fav-sort-hint{font-size:10px;font-weight:500;opacity:.75;margin-left:3px;padding:1px 5px;border-radius:4px;background:color-mix(in srgb,currentColor 12%,transparent)}
 .fav-title{font-family:'Noto Serif SC',serif;font-size:16px;color:var(--ink)}
 .clear-fav-btn{font-size:12px;color:var(--ink3);background:none;border:1px solid var(--border);border-radius:6px;padding:3px 10px;cursor:pointer;transition:all .2s}
 .clear-fav-btn:hover{border-color:#B84A3A;color:#B84A3A}
 /* 收藏夹：五格评分徽章 */
 .fav-score-pill{display:inline-flex;align-items:center;gap:5px;margin-top:8px;padding:3px 8px 3px 4px;border-radius:20px;background:var(--bg);border:1px solid var(--border);cursor:default;font-size:11px;font-weight:600;transition:border-color .15s,box-shadow .15s;user-select:none}
 .fav-score-pill:hover{border-color:currentColor;box-shadow:0 0 0 2px color-mix(in srgb,currentColor 12%,transparent)}
+.card-wuge-pill{display:inline-flex;align-items:center;gap:4px;margin-left:auto;padding:2px 7px 2px 3px;border-radius:20px;border:1px solid;background:var(--bg);font-size:11px;font-weight:600;white-space:nowrap;flex-shrink:0}
+.card-wuge-num{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0}
 .fav-score-ring{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0}
 /* 五格 hover 浮层 */
 .wuge-hover-popup{position:fixed;z-index:9999;width:400px;max-width:calc(100vw - 24px);background:var(--card);border:1px solid var(--border);border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,.18);padding:0;pointer-events:auto;opacity:0;transform:translateY(4px);transition:opacity .15s,transform .15s;overflow:hidden}
@@ -737,6 +744,21 @@ function renderCard(a, b, surname, favBtnVisible=true) {
        </div>`
     : `<div class="poem-block"><span class="no-poem">暂无诗文来源</span></div>`;
 
+  // 五格三才评分（需要姓氏笔画数）
+  let wugeScorePill = '';
+  if (surname && a.st && !a._fallback && (isSingle || (b && b.st && !b._fallback))) {
+    const surData = allChars.find(c => c.c === surname) || lookupMap.get(surname);
+    if (surData && surData.st) {
+      const {tian, ren, di, zong, wai} = calcWuGe(surData.st, a.st, isSingle ? null : b.st);
+      const sc = wugeScore(tian, ren, di, zong, wai, isSingle);
+      const col = sc>=90?'#2E7D32':sc>=80?'#0277BD':sc>=65?'#F57C00':sc>=50?'#C62828':'#b71c1c';
+      const lbl = sc>=90?'上吉':sc>=80?'中吉':sc>=65?'平顺':sc>=50?'偏凶':'大凶';
+      wugeScorePill = `<span class="card-wuge-pill" style="color:${col};border-color:${col}" title="五格三才综合评分">
+        <span class="card-wuge-num" style="background:${col}">${sc}</span>${lbl}
+      </span>`;
+    }
+  }
+
   const bJson = isSingle ? 'null' : JSON.stringify(b).replace(/"/g,'&quot;');
   return `<div class="card">
     ${favBtnVisible?`<button class="fav-btn ${faved?'saved':''}" data-k="${esc(k)}"
@@ -745,6 +767,7 @@ function renderCard(a, b, surname, favBtnVisible=true) {
     <div class="name-row">
       ${sHTML}<span class="name-chars">${esc(a.c)}${isSingle?'':`${esc(b.c)}`}</span>
       <div class="name-py">${esc(a.py)}${isSingle?'':`<br>${esc(b.py)}`}</div>
+      ${wugeScorePill}
     </div>
     <div class="attrs">
       ${attrCard(a, fg1, bg1)}
@@ -849,7 +872,8 @@ function renderPage() {
     ${paging}`;
 }
 
-let favQ = '';   // 收藏夹搜索关键词
+let favQ    = '';        // 收藏夹搜索关键词
+let favSort = 'default'; // 收藏夹排序：default | score | zong | ren
 
 function _favMatch(f, q) {
   if (!q) return true;
@@ -871,31 +895,57 @@ function renderFavorites() {
     return;
   }
   const q = favQ.trim();
-  const favs = allFavs.slice().reverse().filter(f => _favMatch(f, q));
+  let favs = allFavs.slice().reverse().filter(f => _favMatch(f, q));
+
+  // 为每条收藏预计算五格分数（排序和显示共用）
+  favs = favs.map(f => {
+    const surCh   = (f.surname||state.surname||'').charAt(0);
+    const surData = surCh ? (allChars.find(c => c.c === surCh) || lookupMap.get(surCh)) : null;
+    const isSingle = !f.b;
+    const canCalc = surData && surData.st && f.a && f.a.st && !f.a._fallback
+                    && (isSingle || (f.b && f.b.st && !f.b._fallback));
+    if (!canCalc) return { ...f, _wuge: null };
+    const wg = calcWuGe(surData.st, f.a.st, isSingle ? null : f.b.st);
+    return { ...f, _wuge: { ...wg, score: wugeScore(wg.tian,wg.ren,wg.di,wg.zong,wg.wai,isSingle) } };
+  });
+
+  // 按选择排序
+  if (favSort !== 'default') {
+    favs = favs.slice().sort((a, b) => {
+      const av = a._wuge, bv = b._wuge;
+      if (!av && !bv) return 0;
+      if (!av) return 1;
+      if (!bv) return -1;
+      const key = favSort === 'score' ? 'score' : favSort === 'zong' ? 'zong' : 'ren';
+      return (bv[key]||0) - (av[key]||0);
+    });
+  }
 
   const cards = favs.map(f => {
-    const cardHtml = renderCard(f.a, f.b, f.surname||state.surname, true);
-    // 计算五格评分（需要姓氏、两字均在 allChars 且有有效笔画数）
-    const surCh   = (f.surname||state.surname||'').charAt(0);
-    const surData = surCh ? allChars.find(c => c.c === surCh) : null;
+    const surCh  = (f.surname||state.surname||'').charAt(0);
     const isSingleFav = !f.b;
-    const canCalc = surData && f.a && f.a.st && !f.a._fallback
-                    && (isSingleFav || (f.b && f.b.st && !f.b._fallback));
-    if (!canCalc) return cardHtml;
+    const cardHtml = renderCard(f.a, f.b, f.surname||state.surname, true);
+    if (!f._wuge) return cardHtml;
 
-    const {tian,ren,di,zong,wai} = calcWuGe(surData.st, f.a.st, isSingleFav ? null : f.b.st);
-    const score = wugeScore(tian, ren, di, zong, wai);
-    const scoreColor = score>=85?'#3D6B4A':score>=70?'#3A5F8B':score>=55?'#B8924A':'#B84A3A';
-    const scoreLabel = score>=85?'上吉':score>=70?'吉':score>=55?'平':score<40?'大凶':'凶';
+    const {score, tian, ren, di, zong, wai} = f._wuge;
+    const scoreColor = score>=90?'#2E7D32':score>=80?'#0277BD':score>=65?'#F57C00':score>=50?'#C62828':'#b71c1c';
+    const scoreLabel = score>=90?'上吉':score>=80?'中吉':score>=65?'平顺':score>=50?'偏凶':'大凶';
     const wugeHtml  = renderWuGe(surCh, f.a, isSingleFav ? null : f.b);
 
-    // 将评分徽章和隐藏浮层数据插入到 </div> 闭合标签之前（name-card 结尾）
+    // 排序指标小提示（非默认排序时显示当前排序格的数值）
+    const sortHint = favSort === 'zong'
+      ? `<span class="fav-sort-hint">总格 ${zong}</span>`
+      : favSort === 'ren'
+      ? `<span class="fav-sort-hint">人格 ${ren}</span>`
+      : '';
+
     const pill = `<div class="fav-score-pill" style="color:${scoreColor}">
-        <span class="fav-score-ring" style="background:${scoreColor}">${score}</span>${scoreLabel} · 五格三才
+        <span class="fav-score-ring" style="background:${scoreColor}">${score}</span>${scoreLabel} · 五格三才${sortHint}
       </div>
       <div class="wuge-popup-data" hidden>${wugeHtml}</div>`;
     return cardHtml.replace(/(<\/div>\s*)$/, pill + '$1');
   }).join('');
+
   const emptyHint = favs.length === 0
     ? `<div class="empty" style="padding:40px 0">没有匹配「${esc(q)}」的收藏</div>`
     : `<div class="grid">${cards}</div>`;
@@ -903,11 +953,16 @@ function renderFavorites() {
   mainEl.innerHTML=`
     <div class="fav-header">
       <span class="fav-title">已收藏 ${allFavs.length} 个${q ? ` · 显示 ${favs.length} 个` : ''}</span>
-      <div style="display:flex;align-items:center;gap:8px">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <select class="fav-sort-sel" onchange="favSort=this.value;renderFavorites()" title="排序方式">
+          <option value="default" ${favSort==='default'?'selected':''}>默认顺序</option>
+          <option value="score"   ${favSort==='score'  ?'selected':''}>总分排序</option>
+          <option value="zong"    ${favSort==='zong'   ?'selected':''}>总格排序</option>
+          <option value="ren"     ${favSort==='ren'    ?'selected':''}>人格排序</option>
+        </select>
         <input class="fav-search-input" id="favSearchInput" value="${esc(q)}"
           placeholder="搜索名字或拼音…" autocomplete="off"
           oninput="favQ=this.value;renderFavorites()"
-          ${q?'':''}
         >
         ${q?`<button class="clear-fav-btn" onclick="favQ='';renderFavorites()" style="white-space:nowrap">✕ 清除</button>`:''}
         <button class="clear-fav-btn" onclick="clearFavs()">清空收藏夹</button>
@@ -953,24 +1008,31 @@ function switchTab(tab) {
 }
 
 // ── 五格三才 ──────────────────────────────────────────
-// 81 数理吉凶（1=吉 2=凶 0=中）
-const _W81 = [
-  0,1,2,1,2,1,1,1,1,2, // 1-9 (idx 0 unused, 1-9)
-  2,1,2,1,2,1,1,1,1,2, // 10-19
-  2,1,2,1,1,1,2,2,2,1, // 20-29
-  0,1,1,1,2,1,2,1,0,1, // 30-39
-  2,1,0,2,2,1,2,1,1,2, // 40-49
-  2,0,1,0,2,0,2,1,0,2, // 50-59
-  2,1,2,1,2,1,2,1,1,2, // 60-69
-  2,0,2,1,2,0,2,0,0,2, // 70-79
-  2,1                   // 80-81
+// 81 数理五档分值：大吉=100, 吉=80, 平=60, 凶=40, 大凶=20
+const _W81_SCORE = [
+   0,                                              // idx 0 占位
+  100, 40,100, 40,100,  80, 80, 80, 40, 40,       // 1-10
+  100, 40,100, 40,100, 100, 80, 80, 20, 20,       // 11-20
+  100, 40,100,100, 80,  40, 40, 40, 80, 60,       // 21-30
+  100,100,100, 20,100,  20,100, 60, 80, 20,       // 31-40
+  100, 60, 40, 20,100,  40,100,100, 40, 40,       // 41-50
+   60,100, 60, 40, 60,  40,100, 60, 40, 20,       // 51-60
+  100, 20,100, 20,100,  20,100,100, 20, 20,       // 61-70
+   60, 40, 80, 40, 60,  20, 60, 60, 20, 20,       // 71-80
+  100                                              // 81
 ];
 function _w81(n) {
-  // >81 按 ((n-1)%81)+1 折算
+  // >81 按 ((n-1)%81)+1 折算，返回分值 20/40/60/80/100
   let m = n > 81 ? ((n-1)%81)+1 : n < 1 ? 1 : n;
-  return _W81[m] ?? 0; // 0=中 1=吉 2=凶
+  return _W81_SCORE[m] ?? 60;
 }
-const _WUGE_RATING = ['中','吉','凶'];
+function _scoreToTierInfo(score) {
+  if (score >= 100) return {cls:'daji',    rating:'大吉'};
+  if (score >= 80)  return {cls:'ji',      rating:'吉'};
+  if (score >= 60)  return {cls:'zhong',   rating:'平'};
+  if (score >= 40)  return {cls:'xiong',   rating:'凶'};
+  return              {cls:'daxiong', rating:'大凶'};
+}
 const _WUGE_DESC = {
   天格:'祖宗运·先天遗传', 人格:'主运·核心格（最重要）',
   地格:'前运·36岁前', 总格:'后运·晚年总运', 外格:'副运·社交人缘'
@@ -1017,23 +1079,34 @@ function calcWuGe(surSt, c1St, c2St = null) {
   return {tian, ren, di, zong, wai, single: false};
 }
 
-function wugeScore(tian, ren, di, zong, wai) {
-  // 加权：人格 40%，地格 20%，天格 15%，总格 15%，外格 10%
-  const base =
-    _w81(tian)*100/2 * 0.15 +
-    _w81(ren) *100/2 * 0.40 +
-    _w81(di)  *100/2 * 0.20 +
-    _w81(zong)*100/2 * 0.15 +
-    _w81(wai) *100/2 * 0.10;
-  // 三才加减分
-  const wTian = _digitWx(tian), wRen = _digitWx(ren), wDi = _digitWx(di);
-  const r1 = _wxRel(wTian, wRen), r2 = _wxRel(wRen, wDi);
-  let bonus = 0;
-  const _is = r=>r==='sheng'||r==='bei_sheng'||r==='tong';
-  const _ik = r=>r==='ke'||r==='bei_ke';
-  if (_is(r1) && _is(r2)) bonus = 12;
-  else if (_ik(r1)||_ik(r2)) bonus = -12;
-  return Math.min(100, Math.max(0, Math.round(base + bonus)));
+function wugeScore(tian, ren, di, zong, wai, single=false) {
+  const ts=_w81(tian), rs=_w81(ren), ds=_w81(di), zs=_w81(zong), ws=_w81(wai);
+
+  // 1. 基础分（双/单字名独立权重体系）
+  let base;
+  if (single) {
+    // 单字名：总格=人格（不重复计入），外格固定为2（无效）
+    base = ts*0.05 + rs*0.60 + ds*0.35;
+  } else {
+    base = ts*0.05 + rs*0.45 + ds*0.25 + zs*0.20 + ws*0.05;
+  }
+
+  // 2. 三才比例修正（动态边界）
+  const wTian=_digitWx(tian), wRen=_digitWx(ren), wDi=_digitWx(di);
+  const r1=_wxRel(wTian,wRen), r2=_wxRel(wRen,wDi);
+  const isShengFn = r=>r==='sheng'||r==='bei_sheng'||r==='tong';
+  const isKeFn    = r=>r==='ke'||r==='bei_ke';
+  const hasKe   = isKeFn(r1)||isKeFn(r2);
+  const allGood = !isKeFn(r1) && !isKeFn(r2) && (isShengFn(r1)||isShengFn(r2));
+  if (allGood)  base = base + (100 - base) * 0.3;
+  else if (hasKe) base = base - (base - 20) * 0.2;
+
+  // 3. 连凶惩罚：核心三格（人/地/总）中≥2个大凶（分值≤20）则×0.9
+  const coreScores = single ? [rs, ds, rs] : [rs, ds, zs];
+  const bigXiongCount = coreScores.filter(s => s <= 20).length;
+  if (bigXiongCount >= 2) base *= 0.9;
+
+  return Math.min(100, Math.max(0, Math.round(base)));
 }
 
 function renderWuGe(surCh, a, b = null) {
@@ -1055,17 +1128,17 @@ function renderWuGe(surCh, a, b = null) {
   const surSt = surData.st;
   const c1St  = a.st;
   const c2St  = isSingle ? null : b.st;
-  const {tian, ren, di, zong, wai} = calcWuGe(surSt, c1St, c2St);
-  const score = wugeScore(tian, ren, di, zong, wai);
+  const wugeResult = calcWuGe(surSt, c1St, c2St);
+  const {tian, ren, di, zong, wai} = wugeResult;
+  const score = wugeScore(tian, ren, di, zong, wai, isSingle);
 
-  // 评分颜色
-  const scoreColor = score>=85?'#3D6B4A':score>=70?'#3A5F8B':score>=55?'#B8924A':'#B84A3A';
-  const scoreLabel = score>=85?'上吉':score>=70?'吉':score>=55?'平':score<40?'大凶':'凶';
+  // 评分颜色（5档）
+  const scoreColor = score>=90?'#2E7D32':score>=80?'#0277BD':score>=65?'#F57C00':score>=50?'#C62828':'#b71c1c';
+  const scoreLabel = score>=90?'上吉':score>=80?'中吉':score>=65?'平顺':score>=50?'偏凶':'大凶';
 
   // 五格单格渲染
   function cell(label, n, isMain=false) {
-    const r = _w81(n), cls = ['中','ji','xiong'][r];
-    const rating = _WUGE_RATING[r];
+    const {cls, rating} = _scoreToTierInfo(_w81(n));
     const desc = _WUGE_DESC[label]||'';
     let strokesLabel;
     if (isSingle) {
@@ -1745,7 +1818,7 @@ function renderAITable(results, surname) {
     const a = allChars.find(c => c.c === c1char) || makeCharFallback(c1char);
     const b = allChars.find(c => c.c === c2char) || makeCharFallback(c2char);
     const score  = Math.min(100, Math.max(0, Number(r.score) || 0));
-    const scoreColor = score >= 85 ? '#3D6B4A' : score >= 70 ? '#B8924A' : '#B84A3A';
+    const scoreColor = score>=90?'#2E7D32':score>=80?'#0277BD':score>=65?'#F57C00':score>=50?'#C62828':'#b71c1c';
     const faved  = (c1char && c2char) ? isFaved(a, b) : false;
 
     const _wxSt = (ch) => ch._fallback ? 'background:#eee;color:#888' : wxStyle(ch.wx);
