@@ -188,7 +188,10 @@ main{flex:1;overflow-y:auto;padding:18px 22px 48px;display:flex;flex-direction:c
 .wuge-single-hint{font-size:11px;color:#3A5F8B;background:#eef3fb;border-radius:6px;padding:5px 10px;border-left:3px solid #3A5F8B;line-height:1.5}
 
 /* 收藏夹专属 */
-.fav-header{display:flex;align-items:center;justify-content:space-between;padding:4px 0}
+.fav-header{display:flex;align-items:center;justify-content:space-between;padding:4px 0;gap:12px;flex-wrap:wrap}
+.fav-search-input{height:30px;padding:0 10px;border:1px solid var(--border);border-radius:8px;background:var(--card);font-size:13px;color:var(--ink);outline:none;transition:border-color .2s;width:160px}
+.fav-search-input:focus{border-color:var(--green)}
+.fav-search-input::placeholder{color:var(--ink3)}
 .fav-title{font-family:'Noto Serif SC',serif;font-size:16px;color:var(--ink)}
 .clear-fav-btn{font-size:12px;color:var(--ink3);background:none;border:1px solid var(--border);border-radius:6px;padding:3px 10px;cursor:pointer;transition:all .2s}
 .clear-fav-btn:hover{border-color:#B84A3A;color:#B84A3A}
@@ -214,6 +217,7 @@ main{flex:1;overflow-y:auto;padding:18px 22px 48px;display:flex;flex-direction:c
 .ban-empty{font-size:12px;color:var(--ink3);font-style:italic}
 /* 卡片上的拉黑按钮 */
 .multi-badge{font-size:9px;padding:1px 4px;border-radius:3px;background:#F0EBF8;color:#7B5EA7;border:1px solid #d4c5eb;cursor:default;white-space:nowrap}
+.yijing-badge{font-size:9px;padding:1px 4px;border-radius:3px;background:#FBF0D0;color:#8B6914;border:1px solid #D4A820;font-weight:700;white-space:nowrap;cursor:default}
 .multi-pys{display:flex;flex-wrap:wrap;gap:4px;margin-top:3px}
 .multi-pys span{font-size:10px;color:var(--ink3);background:var(--bg);border-radius:3px;padding:0 4px}
 .multi-pys sub{font-size:8px;color:#7B5EA7}
@@ -423,6 +427,7 @@ details[open] .ai-bazi-summary::before{transform:rotate(90deg)}
   <div class="filter-group">
     <div class="filter-label">排序</div>
     <select class="search-input" id="sortSel" style="cursor:pointer">
+      <option value="yijing">☯ 易经吉字优先</option>
       <option value="default">默认（笔画升序）</option>
       <option value="wx">五行分组</option>
       <option value="st_asc">总笔画 少→多</option>
@@ -485,6 +490,7 @@ const WX_COLOR   = {
 let allChars = [], filtC1 = [], filtC2 = [];
 let lookupChars = [];          // 扩展查名字库（all_chars 之外的字）
 let lookupMap   = new Map();   // char → entry，查名快速检索
+let yijingSet   = new Set();   // 易经50吉字，O(1) 查询
 let page = 1, currentTab = 'browse';
 
 const state = {
@@ -498,7 +504,7 @@ const state = {
   open1: new Set(['large','small']),
   open2: new Set(['large','small']),
   st1Min:1, st1Max:25, st2Min:1, st2Max:25,
-  srcFilter:'all', sort:'default',
+  srcFilter:'all', sort:'yijing',
 };
 
 // ── 收藏夹 ─────────────────────────────────────────
@@ -713,6 +719,7 @@ function renderCard(a, b, surname, favBtnVisible=true) {
           ${ch.st?`<span class="stroke-badge">${ch.st}画</span>`:''}
           <span class="open-badge">${openLabel(ch.open)}</span>
           ${ch.multi ? `<span class="multi-badge" title="${(ch.pys||[]).map(p=>p.py+(p.tone?'('+p.tone+'声)':'')).join(' / ')}">多音</span>` : ''}
+          ${yijingSet.has(ch.c) ? '<span class="yijing-badge" title="易经50吉字">易经</span>' : ''}
           ${charBadge(ch)}
           <button class="ban-char-btn" onclick="addBan('${esc(ch.c)}')" title="屏蔽「${esc(ch.c)}」字">⊘ 屏蔽</button>
         </div>
@@ -842,15 +849,31 @@ function renderPage() {
     ${paging}`;
 }
 
+let favQ = '';   // 收藏夹搜索关键词
+
+function _favMatch(f, q) {
+  if (!q) return true;
+  const sur = f.surname || state.surname || '';
+  const name = sur + f.a.c + (f.b ? f.b.c : '');
+  if (name.includes(q)) return true;
+  // 拼音匹配（去声调符号后包含即可）
+  const normalize = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+  const pys = [f.a.py, f.b&&f.b.py].filter(Boolean).map(normalize).join(' ');
+  return pys.includes(normalize(q));
+}
+
 // ── 渲染收藏夹 ──────────────────────────────────────
 function renderFavorites() {
   const mainEl = document.getElementById('main');
-  const favs = loadFavs();
-  if (!favs.length) {
+  const allFavs = loadFavs();
+  if (!allFavs.length) {
     mainEl.innerHTML=`<div class="empty"><div class="big">♡</div>收藏夹还是空的<br>在浏览时点击卡片右上角的 ♡ 即可收藏</div>`;
     return;
   }
-  const cards = favs.slice().reverse().map(f => {
+  const q = favQ.trim();
+  const favs = allFavs.slice().reverse().filter(f => _favMatch(f, q));
+
+  const cards = favs.map(f => {
     const cardHtml = renderCard(f.a, f.b, f.surname||state.surname, true);
     // 计算五格评分（需要姓氏、两字均在 allChars 且有有效笔画数）
     const surCh   = (f.surname||state.surname||'').charAt(0);
@@ -873,12 +896,30 @@ function renderFavorites() {
       <div class="wuge-popup-data" hidden>${wugeHtml}</div>`;
     return cardHtml.replace(/(<\/div>\s*)$/, pill + '$1');
   }).join('');
+  const emptyHint = favs.length === 0
+    ? `<div class="empty" style="padding:40px 0">没有匹配「${esc(q)}」的收藏</div>`
+    : `<div class="grid">${cards}</div>`;
+
   mainEl.innerHTML=`
     <div class="fav-header">
-      <span class="fav-title">已收藏 ${favs.length} 个名字</span>
-      <button class="clear-fav-btn" onclick="clearFavs()">清空收藏夹</button>
+      <span class="fav-title">已收藏 ${allFavs.length} 个${q ? ` · 显示 ${favs.length} 个` : ''}</span>
+      <div style="display:flex;align-items:center;gap:8px">
+        <input class="fav-search-input" id="favSearchInput" value="${esc(q)}"
+          placeholder="搜索名字或拼音…" autocomplete="off"
+          oninput="favQ=this.value;renderFavorites()"
+          ${q?'':''}
+        >
+        ${q?`<button class="clear-fav-btn" onclick="favQ='';renderFavorites()" style="white-space:nowrap">✕ 清除</button>`:''}
+        <button class="clear-fav-btn" onclick="clearFavs()">清空收藏夹</button>
+      </div>
     </div>
-    <div class="grid">${cards}</div>`;
+    ${emptyHint}`;
+
+  // 恢复输入框焦点和光标位置
+  if (q) {
+    const inp = document.getElementById('favSearchInput');
+    if (inp) { inp.focus(); inp.setSelectionRange(inp.value.length, inp.value.length); }
+  }
 }
 
 function clearFavs() {
@@ -898,6 +939,7 @@ function goPage(p) {
 // ── tab 切换 ─────────────────────────────────────────
 function switchTab(tab) {
   currentTab = tab;
+  if (tab !== 'fav') favQ = '';   // 离开收藏夹时清空搜索词
   window._hideWugePopup && window._hideWugePopup();
   document.getElementById('tabBrowse').classList.toggle('active', tab==='browse');
   document.getElementById('tabFav').classList.toggle('active', tab==='fav');
@@ -1183,6 +1225,11 @@ function doLookup() {
 // ── 过滤 ────────────────────────────────────────────
 function sortPool(pool) {
   const s = state.sort;
+  if (s==='yijing')  return [...pool].sort((a,b)=>{
+    const ya = yijingSet.has(a.c) ? 0 : 1;
+    const yb = yijingSet.has(b.c) ? 0 : 1;
+    return ya - yb || a.st - b.st;   // 吉字在前，其余按笔画升序
+  });
   if (s==='st_asc')  return [...pool].sort((a,b)=>a.st-b.st);
   if (s==='st_desc') return [...pool].sort((a,b)=>b.st-a.st);
   if (s==='wx')      return [...pool].sort((a,b)=>a.wx.localeCompare(b.wx)||a.st-b.st);
@@ -1307,15 +1354,20 @@ document.getElementById('resetBtn').addEventListener('click',()=>{
 // ── 加载 ─────────────────────────────────────────────
 async function init() {
   try {
-    const [res, resLookup] = await Promise.all([
+    const [res, resLookup, resYj] = await Promise.all([
       fetch(DATA_URL),
       fetch(LOOKUP_DATA_URL).catch(() => null),
+      fetch('../data/yijing_lucky.json').catch(() => null),
     ]);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     allChars = await res.json();
     if (resLookup && resLookup.ok) {
       lookupChars = await resLookup.json();
       lookupChars.forEach(e => lookupMap.set(e.c, e));
+    }
+    if (resYj && resYj.ok) {
+      const arr = await resYj.json();
+      yijingSet = new Set(arr);
     }
     const ze=allChars.filter(c=>c.tone>=3).length, ping=allChars.filter(c=>c.tone<=2).length;
     document.getElementById('totalPill').textContent=`全库 ${allChars.length.toLocaleString()} 字`;
@@ -1392,6 +1444,7 @@ init();
   }
 
   document.addEventListener('mouseover', e => {
+    if (currentTab !== 'fav') return;   // 仅在收藏夹 tab 内生效
     const pill = e.target.closest('.fav-score-pill');
     if (!pill) return;
     const dataEl = pill.parentElement && pill.parentElement.querySelector('.wuge-popup-data');
