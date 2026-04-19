@@ -33,6 +33,11 @@ header{background:var(--card);border-bottom:1px solid var(--border);padding:0 20
 .fav-count:empty{display:none}
 header .sep{flex:1}
 .stat-pill{font-size:12px;color:var(--ink3);background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:3px 12px;white-space:nowrap}
+.rebuild-btn{height:28px;padding:0 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);font-size:11px;font-weight:500;color:var(--ink2);cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0}
+.rebuild-btn:hover{border-color:var(--green);color:var(--green)}
+.rebuild-btn.loading{opacity:.6;cursor:default;color:var(--ink3)}
+.rebuild-btn.ok{border-color:#2E7D32;color:#2E7D32}
+.rebuild-btn.err{border-color:#B84A3A;color:#B84A3A}
 
 /* ── 布局 ── */
 .layout{display:flex;flex:1;overflow:hidden;height:calc(100vh - 52px)}
@@ -374,6 +379,7 @@ details[open] .ai-bazi-summary::before{transform:rotate(90deg)}
   </div>
   <div class="sep"></div>
   <div class="stat-pill" id="totalPill">加载中…</div>
+  <button class="rebuild-btn" id="rebuildBtn" onclick="rebuildChars()" title="重新从 full_wuxing_dict.json 生成字库，修改字典后点击此处热更新（无需重启服务器）">↺ 重新生成字库</button>
 </header>
 
 <div class="layout">
@@ -547,6 +553,7 @@ details[open] .ai-bazi-summary::before{transform:rotate(90deg)}
 <script>
 const DATA_URL        = '../data/all_chars.json';
 const LOOKUP_DATA_URL = '../data/lookup_chars.json';
+const _FETCH_OPTS     = { cache: 'no-cache' };
 const PAGE_SIZE = 60;
 const FAV_KEY   = 'baby_name_favorites';
 const BAN_KEY   = 'baby_name_blacklist';
@@ -1344,8 +1351,8 @@ function doLookup() {
   const isSingle = chars.length === 1;
   const c1 = chars[0], c2 = isSingle ? null : chars[1];
   const charMap = Object.fromEntries(allChars.map(c => [c.c, c]));
-  const aRaw = charMap[c1];
-  const bRaw = isSingle ? null : charMap[c2];
+  const aRaw = charMap[c1] || lookupMap.get(c1);
+  const bRaw = isSingle ? null : (charMap[c2] || lookupMap.get(c2));
   const a = aRaw || makeCharFallback(c1);
   const b = isSingle ? null : (bRaw || makeCharFallback(c2));
 
@@ -1499,9 +1506,9 @@ document.getElementById('resetBtn').addEventListener('click',()=>{
 async function init() {
   try {
     const [res, resLookup, resYj] = await Promise.all([
-      fetch(DATA_URL),
-      fetch(LOOKUP_DATA_URL).catch(() => null),
-      fetch('../data/yijing_lucky.json').catch(() => null),
+      fetch(DATA_URL, _FETCH_OPTS),
+      fetch(LOOKUP_DATA_URL, _FETCH_OPTS).catch(() => null),
+      fetch('../data/yijing_lucky.json', _FETCH_OPTS).catch(() => null),
     ]);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     allChars = await res.json();
@@ -2497,6 +2504,55 @@ function evalRenderCard(r) {
     </div>
     ${r.verdict ? `<div class="eval-verdict" style="color:${gradeConf.txt}">判定：${esc(r.verdict)}</div>` : ''}
   </div>`;
+}
+
+// ── 重新生成字库（热更新，无需重启服务）──────────────
+async function rebuildChars() {
+  const btn = document.getElementById('rebuildBtn');
+  if (!btn || btn.classList.contains('loading')) return;
+
+  btn.classList.add('loading');
+  btn.textContent = '↺ 生成中…';
+
+  try {
+    const resp = await fetch('/api/rebuild', { method: 'POST' });
+    const data = await resp.json();
+    if (data.ok) {
+      // 热更新全局 allChars 和 lookupChars
+      allChars = data.chars || [];
+      if (data.lookup && data.lookup.length) {
+        lookupChars = data.lookup;
+        lookupMap = new Map(lookupChars.map(c => [c.c, c]));
+      }
+      // 刷新当前 tab
+      applyFilter();
+      renderPage();
+      const n = data.count?.toLocaleString() || '?';
+      document.getElementById('totalPill').textContent =
+        `字库已更新：${n} 字`;
+      btn.classList.remove('loading');
+      btn.classList.add('ok');
+      btn.textContent = `✓ 已更新 ${n} 字`;
+      setTimeout(() => {
+        btn.classList.remove('ok');
+        btn.textContent = '↺ 重新生成字库';
+        // 还原 totalPill
+        const total = estimateTotal();
+        document.getElementById('totalPill').textContent =
+          `约 ${total.toLocaleString()} 种组合`;
+      }, 3000);
+    } else {
+      throw new Error(data.error || '未知错误');
+    }
+  } catch (e) {
+    btn.classList.remove('loading');
+    btn.classList.add('err');
+    btn.textContent = `✗ 失败：${e.message.slice(0,20)}`;
+    setTimeout(() => {
+      btn.classList.remove('err');
+      btn.textContent = '↺ 重新生成字库';
+    }, 4000);
+  }
 }
 </script>
 </body>

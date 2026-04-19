@@ -116,18 +116,35 @@ def load_wuxing_from_dict(
     dict_path: Path = DEFAULT_WUXING_DICT,
 ) -> dict[str, tuple[str, int]]:
     """
-    从 full_wuxing_dict.py 加载五行与笔画数据。
+    加载五行与笔画数据。
 
-    该文件包含 jin_dict / mu_dict / huo_dict / shui_dict / tu_dict 五个字典，
-    每个字典的结构为 {笔画数: [字, ...]}。
+    优先读取同目录下的 full_wuxing_dict.json（推荐，易于动态维护）；
+    若不存在则回退到同名 .py 文件（向后兼容）。
+
+    JSON 格式：{"金": {"9": ["字",...], ...}, "木": {...}, ...}
+    .py  格式：jin_dict / mu_dict / huo_dict / shui_dict / tu_dict
 
     Returns:
         char -> (wuxing, stroke_count) 映射
     """
+    # 优先使用 JSON 格式
+    json_path = dict_path.with_suffix(".json")
+    if json_path.exists():
+        import json as _json
+        data = _json.loads(json_path.read_text(encoding="utf-8"))
+        wuxing_map: dict[str, tuple[str, int]] = {}
+        for wuxing_name, stroke_dict in data.items():
+            for stroke_str, chars in stroke_dict.items():
+                sc = int(stroke_str)
+                for char in chars:
+                    wuxing_map[char] = (wuxing_name, sc)
+        return wuxing_map
+
+    # 回退到 .py 格式（向后兼容）
     if not dict_path.exists():
         raise FileNotFoundError(
-            f"找不到五行字典文件：{dict_path}\n"
-            f"请确认 data/full_wuxing_dict.py 已放置在项目根目录的 data/ 文件夹中。"
+            f"找不到五行字典文件：{json_path} 或 {dict_path}\n"
+            f"请运行 python src/convert_wuxing_to_json.py 生成 JSON 格式文件。"
         )
 
     spec = importlib.util.spec_from_file_location("full_wuxing_dict", dict_path)
@@ -142,7 +159,7 @@ def load_wuxing_from_dict(
         (mod.tu_dict, "土"),
     ]
 
-    wuxing_map: dict[str, tuple[str, int]] = {}
+    wuxing_map = {}
     for d, wuxing_name in wuxing_source:
         for stroke_count, chars in d.items():
             for char in chars:

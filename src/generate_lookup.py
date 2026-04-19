@@ -67,9 +67,21 @@ def _classify_openness(final: str) -> str:
 
 
 def _load_wuxing_map() -> dict[str, tuple[str, int]]:
-    """解析 full_wuxing_dict.py → {char: (wx, strokes)}"""
+    """加载五行字典 → {char: (wx, strokes)}
+    优先读取 full_wuxing_dict.json，回退到 full_wuxing_dict.py"""
+    json_path = _DICT.with_suffix('.json')
+    if json_path.exists():
+        data = json.loads(json_path.read_text(encoding='utf-8'))
+        wx_map: dict[str, tuple[str, int]] = {}
+        for wx_cn, stroke_dict in data.items():
+            for stroke_str, chars in stroke_dict.items():
+                for c in chars:
+                    wx_map[c] = (wx_cn, int(stroke_str))
+        return wx_map
+
+    # 回退：解析 full_wuxing_dict.py
     content = _DICT.read_text(encoding='utf-8')
-    wx_map: dict[str, tuple[str, int]] = {}
+    wx_map = {}
     name_to_cn = {
         'jin_dict': '金', 'mu_dict': '木', 'shui_dict': '水',
         'huo_dict': '火', 'tu_dict':  '土',
