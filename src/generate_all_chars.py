@@ -128,9 +128,27 @@ def _load_multi_chars(
             })
     return result
 
-_ROOT     = Path(__file__).parent.parent
-_POEM_DIR = _ROOT / "data" / "poems"
-_OUT_FILE = _ROOT / "data" / "all_chars.json"
+_ROOT      = Path(__file__).parent.parent
+_POEM_DIR  = _ROOT / "data" / "poems"
+_OUT_FILE  = _ROOT / "data" / "all_chars.json"
+_TIER_FILE = _ROOT / "data" / "char_tier.json"
+
+
+def _load_tier_map() -> dict[str, str]:
+    """加载字级映射 {char: 'S'|'A'}，不在表中的字默认为 'B'"""
+    if not _TIER_FILE.exists():
+        return {}
+    try:
+        data = json.loads(_TIER_FILE.read_text(encoding="utf-8"))
+        tier_map: dict[str, str] = {}
+        for ch in data.get("S", []):
+            tier_map[ch] = "S"
+        for ch in data.get("A", []):
+            if ch not in tier_map:   # S 优先
+                tier_map[ch] = "A"
+        return tier_map
+    except Exception:
+        return {}
 
 BOOKS = [
     ("shijing", "诗经"),
@@ -213,7 +231,8 @@ def build_char_poem_map() -> dict[str, dict]:
 def generate(verbose: bool = True) -> None:
     if verbose:
         print("加载字符池…")
-    wuxing_map = load_wuxing_from_dict()
+    tier_map    = _load_tier_map()
+    wuxing_map  = load_wuxing_from_dict()
     char_attrs  = load_chars_from_csv(wuxing_map=wuxing_map)
     if verbose:
         print(f"  单音字：{len(char_attrs):,}")
@@ -242,6 +261,9 @@ def generate(verbose: bool = True) -> None:
             "st":   a.stroke_count,
             "open": a.openness,
         }
+        t = tier_map.get(ch)
+        if t:
+            entry["tier"] = t
         src = char_poem.get(ch)
         if src:
             entry["sent"]    = src["sent"]
@@ -252,9 +274,13 @@ def generate(verbose: bool = True) -> None:
             entry["bookkey"] = src["bookkey"]
         result.append(entry)
 
-    # 多音字：追加诗文来源
+    # 多音字：追加诗文来源和 tier
     for entry in multi_entries:
-        src = char_poem.get(entry["c"])
+        ch = entry["c"]
+        t = tier_map.get(ch)
+        if t:
+            entry["tier"] = t
+        src = char_poem.get(ch)
         if src:
             entry["sent"]    = src["sent"]
             entry["title"]   = src["title"]

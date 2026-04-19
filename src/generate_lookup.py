@@ -21,11 +21,28 @@ import sys
 import unicodedata
 from pathlib import Path
 
-_ROOT = Path(__file__).parent.parent
-_CSV  = _ROOT / "data" / "chinese_chars.csv"
-_DICT = _ROOT / "data" / "full_wuxing_dict.py"
-_ALL  = _ROOT / "data" / "all_chars.json"
-_OUT  = _ROOT / "data" / "lookup_chars.json"
+_ROOT  = Path(__file__).parent.parent
+_CSV   = _ROOT / "data" / "chinese_chars.csv"
+_DICT  = _ROOT / "data" / "full_wuxing_dict.py"
+_ALL   = _ROOT / "data" / "all_chars.json"
+_TIER  = _ROOT / "data" / "char_tier.json"
+_OUT   = _ROOT / "data" / "lookup_chars.json"
+
+
+def _load_tier_map() -> dict[str, str]:
+    if not _TIER.exists():
+        return {}
+    try:
+        data = json.loads(_TIER.read_text(encoding='utf-8'))
+        tier_map: dict[str, str] = {}
+        for ch in data.get('S', []):
+            tier_map[ch] = 'S'
+        for ch in data.get('A', []):
+            if ch not in tier_map:
+                tier_map[ch] = 'A'
+        return tier_map
+    except Exception:
+        return {}
 
 # ── 声调符号 → 数字 ─────────────────────────────────────
 _TONE_MARKS: dict[str, int] = {}
@@ -106,6 +123,7 @@ def generate() -> None:
             pool_chars.add(entry['c'])
 
     wuxing_map = _load_wuxing_map()
+    tier_map   = _load_tier_map()
 
     results: list[dict] = []
     seen: set[str] = set()
@@ -153,6 +171,10 @@ def generate() -> None:
                 'st':   st,
                 'open': openness,
             }
+
+            t = tier_map.get(char)
+            if t:
+                entry['tier'] = t
 
             # 多音字备注
             if ',' in raw_py:
