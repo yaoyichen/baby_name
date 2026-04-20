@@ -154,54 +154,65 @@ main{flex:1;overflow-y:auto;padding:18px 22px 48px;display:flex;flex-direction:c
 .empty .big{font-size:36px;opacity:.3;margin-bottom:8px}
 
 /* 查名专属 */
-.lookup-wrap{max-width:560px;margin:48px auto 0;display:flex;flex-direction:column;align-items:center;gap:24px}
+.lookup-wrap{max-width:560px;margin:48px auto 0;display:flex;flex-direction:column;align-items:center;gap:20px}
 .lookup-title{font-family:'Noto Serif SC',serif;font-size:18px;color:var(--ink2);letter-spacing:.06em}
-.lookup-input-row{display:flex;align-items:center;gap:10px}
-.lookup-surname{width:52px;height:52px;border:2px solid var(--border);border-radius:10px;background:var(--card);font-family:'Noto Serif SC',serif;font-size:26px;font-weight:300;color:var(--ink3);text-align:center;outline:none;transition:border-color .2s}
-.lookup-name-input{width:108px;height:52px;border:2px solid var(--green);border-radius:10px;background:var(--card);font-family:'Noto Serif SC',serif;font-size:26px;font-weight:600;color:var(--ink);text-align:center;letter-spacing:.12em;outline:none;transition:border-color .2s;padding:0 6px}
-.lookup-name-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,146,74,.15)}
-.lookup-hint{font-size:12px;color:var(--ink3)}
+.lookup-input-row{display:flex;flex-direction:column;align-items:center;gap:8px}
+.lookup-name-card{display:flex;align-items:stretch;border:2px solid var(--border);border-radius:14px;background:var(--card);overflow:hidden;transition:border-color .2s,box-shadow .2s;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.lookup-name-card:focus-within{border-color:var(--green);box-shadow:0 0 0 3px rgba(80,120,80,.1)}
+.lookup-surname{width:64px;height:64px;border:none;border-right:1px solid var(--border);background:transparent;font-family:'Noto Serif SC',serif;font-size:28px;font-weight:400;color:var(--ink2);text-align:center;outline:none;flex-shrink:0}
+.lookup-surname::placeholder{color:var(--ink3);font-weight:300}
+.lookup-name-input{width:140px;height:64px;border:none;background:transparent;font-family:'Noto Serif SC',serif;font-size:28px;font-weight:600;color:var(--ink);text-align:center;letter-spacing:.1em;outline:none;padding:0 10px}
+.lookup-name-input::placeholder{font-size:16px;font-weight:400;color:var(--ink3);letter-spacing:.02em}
+.lookup-labels{display:flex;align-items:center;gap:0}
+.lookup-label-sur{width:68px;font-size:10px;color:var(--ink3);text-align:center;letter-spacing:.06em}
+.lookup-label-name{width:144px;font-size:10px;color:var(--ink3);text-align:center;letter-spacing:.06em}
+.lookup-hint{font-size:11px;color:var(--ink3);opacity:.8}
 .lookup-result{width:100%;display:flex;flex-direction:column;gap:12px}
 .lookup-warn{background:#FBF3E4;border:1px solid #e8d5a3;border-radius:8px;padding:10px 14px;font-size:13px;color:#7A5C3A}
 
 /* ── 五格三才 ── */
-.wuge-section{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:14px}
-.wuge-header{display:flex;align-items:center;justify-content:space-between}
+.wuge-section{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:16px}
+.wuge-header{display:flex;align-items:center;justify-content:space-between;padding-bottom:14px;border-bottom:1px solid var(--border)}
 .wuge-title{font-family:'Noto Serif SC',serif;font-size:14px;font-weight:600;color:var(--ink2);letter-spacing:.06em}
-.wuge-score-badge{display:flex;align-items:center;gap:6px}
-.wuge-score-ring{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0}
-.wuge-score-label{font-size:11px;color:var(--ink3);text-align:right;line-height:1.5}
-.wuge-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
-.wuge-cell{display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px 8px;border-radius:8px;border:1px solid var(--border);background:var(--bg)}
-.wuge-cell-label{font-size:10px;color:var(--ink3);letter-spacing:.04em}
-.wuge-cell-num{font-family:'Noto Serif SC',serif;font-size:18px;font-weight:600;color:var(--ink)}
-.wuge-cell-wx{display:inline-block;font-size:11px;font-weight:600;padding:1px 7px;border-radius:10px;margin:2px 0 1px}
-.wuge-cell-strokes{font-size:10px;color:var(--ink3)}
-.wuge-cell-rating{font-size:11px;font-weight:600;padding:1px 7px;border-radius:10px}
-.wuge-cell-desc{font-size:9px;color:var(--ink3);text-align:center;line-height:1.4;margin-top:1px}
-.wuge-cell.daji{border-color:#81c784;background:#e8f5e9}.wuge-cell.daji .wuge-cell-rating{background:#2E7D32;color:#fff}
-.wuge-cell.ji{border-color:#90caf9;background:#e3f2fd}.wuge-cell.ji .wuge-cell-rating{background:#0277BD;color:#fff}
-.wuge-cell.zhong{border-color:#e0d5c0;background:#f9f5ee}.wuge-cell.zhong .wuge-cell-rating{background:#F57C00;color:#fff}
-.wuge-cell.xiong{border-color:#e8b8b3;background:#FAECEB}.wuge-cell.xiong .wuge-cell-rating{background:#C62828;color:#fff}
-.wuge-cell.daxiong{border-color:#ef9a9a;background:#ffebee}.wuge-cell.daxiong .wuge-cell-rating{background:#b71c1c;color:#fff}
-.wuge-cell.ren{border-left:3px solid var(--green)}
-.sancai-section{display:flex;flex-direction:column;gap:8px}
+.wuge-score-badge{display:flex;align-items:center;gap:8px}
+.wuge-score-ring{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0;box-shadow:0 2px 10px rgba(0,0,0,.18)}
+.wuge-score-label{font-size:11px;color:var(--ink3);text-align:right;line-height:1.6}
+.wuge-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+.wuge-cell{display:flex;flex-direction:column;align-items:center;gap:3px;padding:12px 4px 10px;border-radius:10px;border:1px solid var(--border);background:var(--bg);transition:box-shadow .15s}
+.wuge-cell-label{font-size:10px;color:var(--ink3);letter-spacing:.06em;font-weight:500;display:flex;align-items:center;gap:3px}
+.wuge-cell-label-main{font-size:8px;font-weight:700;color:#fff;background:var(--green);border-radius:3px;padding:0 3px;line-height:1.6;letter-spacing:.02em}
+.wuge-cell-num{font-family:'Noto Serif SC',serif;font-size:22px;font-weight:700;color:var(--ink);line-height:1.1;margin:2px 0}
+.wuge-cell-wx{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;margin:1px 0 2px}
+.wuge-cell-strokes{font-size:10px;color:var(--ink3);letter-spacing:-.01em}
+.wuge-cell-rating-row{display:flex;align-items:center;gap:4px;margin-top:4px;flex-wrap:wrap;justify-content:center}
+.wuge-cell-rating{font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;flex-shrink:0}
+.wuge-cell-fortune-name{font-size:9.5px;font-weight:700;color:currentColor;opacity:.75;white-space:nowrap}
+.wuge-cell-tian-badge{font-size:9.5px;font-weight:500;color:var(--ink3);opacity:.55;margin-top:3px;letter-spacing:.02em}
+.wuge-cell-fortune-text{font-size:9px;color:var(--ink3);text-align:center;line-height:1.5;margin-top:3px;display:-webkit-box;-webkit-line-clamp:3;line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;opacity:.85}
+.wuge-cell-desc{font-size:8.5px;color:var(--ink3);opacity:.6;text-align:center;line-height:1.3;margin-top:5px;padding-top:4px;border-top:1px dashed color-mix(in srgb,var(--border) 80%,transparent)}
+.wuge-cell.daji{border-color:#81c784;background:var(--card)}.wuge-cell.daji .wuge-cell-rating{background:#2E7D32;color:#fff}
+.wuge-cell.ji{border-color:#90caf9;background:var(--card)}.wuge-cell.ji .wuge-cell-rating{background:#0277BD;color:#fff}
+.wuge-cell.zhong{border-color:#e0d5c0;background:var(--card)}.wuge-cell.zhong .wuge-cell-rating{background:#F57C00;color:#fff}
+.wuge-cell.xiong{border-color:#e8b8b3;background:var(--card)}.wuge-cell.xiong .wuge-cell-rating{background:#C62828;color:#fff}
+.wuge-cell.daxiong{border-color:#ef9a9a;background:var(--card)}.wuge-cell.daxiong .wuge-cell-rating{background:#b71c1c;color:#fff}
+.wuge-cell.ren{border-color:color-mix(in srgb,var(--green) 60%,var(--border));background:color-mix(in srgb,var(--green) 4%,var(--card))}
+.sancai-section{display:flex;flex-direction:column;gap:10px;padding-top:2px}
 .sancai-title{font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--ink3)}
-.sancai-flow{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.sancai-item{display:flex;flex-direction:column;align-items:center;gap:2px}
-.sancai-item-label{font-size:9px;color:var(--ink3)}
-.sancai-item-wx{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff}
+.sancai-flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.sancai-item{display:flex;flex-direction:column;align-items:center;gap:3px}
+.sancai-item-label{font-size:9px;color:var(--ink3);font-weight:500;letter-spacing:.04em}
+.sancai-item-wx{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#fff;box-shadow:0 2px 6px rgba(0,0,0,.15)}
 .sancai-item-num{font-size:9px;color:var(--ink3)}
-.sancai-arrow{font-size:16px;padding-bottom:10px}
+.sancai-arrow{font-size:16px;padding-bottom:14px;opacity:.7}
 .sancai-arrow.sheng{color:#3D6B4A}
 .sancai-arrow.ke{color:#B84A3A}
 .sancai-arrow.tong{color:#B8924A}
-.sancai-verdict{font-size:12px;padding:6px 12px;border-radius:6px;line-height:1.6}
+.sancai-verdict{font-size:12px;padding:8px 14px;border-radius:8px;line-height:1.7}
 .sancai-verdict.sheng{background:#f0f7f0;color:#2d5238;border-left:3px solid #3D6B4A}
 .sancai-verdict.ke{background:#FAECEB;color:#7A2518;border-left:3px solid #B84A3A}
 .sancai-verdict.mix{background:#FBF3E4;color:#5C4010;border-left:3px solid #B8924A}
-.wuge-no-sur{font-size:12px;color:var(--ink3);text-align:center;padding:12px;background:var(--bg);border-radius:8px;border:1px dashed var(--border)}
-.wuge-single-hint{font-size:11px;color:#3A5F8B;background:#eef3fb;border-radius:6px;padding:5px 10px;border-left:3px solid #3A5F8B;line-height:1.5}
+.wuge-no-sur{font-size:12px;color:var(--ink3);text-align:center;padding:14px;background:var(--bg);border-radius:8px;border:1px dashed var(--border)}
+.wuge-single-hint{font-size:11px;color:#3A5F8B;background:#eef3fb;border-radius:6px;padding:6px 12px;border-left:3px solid #3A5F8B;line-height:1.6}
 
 /* 收藏夹专属 */
 .fav-header{display:flex;align-items:center;justify-content:space-between;padding:4px 0;gap:12px;flex-wrap:wrap}
@@ -822,7 +833,7 @@ function estimateTotal() {
 }
 
 // ── 渲染单卡 ────────────────────────────────────────
-function renderCard(a, b, surname, favBtnVisible=true) {
+function renderCard(a, b, surname, favBtnVisible=true, showWugeHover=false) {
   const isSingle = b === null || b === undefined;
   const [fg1,bg1]=WX_COLOR[a.wx]||['#888','#eee'];
   const [fg2,bg2]=isSingle ? ['#888','#eee'] : (WX_COLOR[b.wx]||['#888','#eee']);
@@ -872,9 +883,19 @@ function renderCard(a, b, surname, favBtnVisible=true) {
       const sc = wugeScore(tian, ren, di, zong, wai, isSingle);
       const col = sc>=90?'#2E7D32':sc>=80?'#0277BD':sc>=65?'#F57C00':sc>=50?'#C62828':'#b71c1c';
       const lbl = sc>=90?'上吉':sc>=80?'中吉':sc>=65?'平顺':sc>=50?'偏凶':'大凶';
-      wugeScorePill = `<span class="card-wuge-pill" style="color:${col};border-color:${col}" title="五格三才综合评分">
-        <span class="card-wuge-num" style="background:${col}">${sc}</span>${lbl}
-      </span>`;
+      if (showWugeHover) {
+        const wugeDetail = renderWuGe(surname, a, isSingle ? null : b);
+        wugeScorePill = `<div style="position:relative;display:inline-flex;margin-left:auto">
+          <span class="card-wuge-pill fav-score-pill" style="color:${col};border-color:${col};margin-top:0">
+            <span class="card-wuge-num" style="background:${col}">${sc}</span>${lbl}
+          </span>
+          <div class="wuge-popup-data" hidden>${wugeDetail}</div>
+        </div>`;
+      } else {
+        wugeScorePill = `<span class="card-wuge-pill" style="color:${col};border-color:${col}">
+          <span class="card-wuge-num" style="background:${col}">${sc}</span>${lbl}
+        </span>`;
+      }
     }
   }
 
@@ -979,7 +1000,7 @@ function renderPage() {
   const totalPages = Math.max(1, Math.ceil(total/PAGE_SIZE));
   if (page > totalPages) page = totalPages;
   const items = getPageItems(page);
-  const cards = items.map(({a,b})=>renderCard(a,b,surname)).join('');
+  const cards = items.map(({a,b})=>renderCard(a,b,surname,true,true)).join('');
 
   let paging='';
   if (totalPages>1) {
@@ -1160,10 +1181,10 @@ function switchTab(tab) {
 // 81 数理五档分值：大吉=100, 吉=80, 平=60, 凶=40, 大凶=20
 const _W81_SCORE = [
    0,                                              // idx 0 占位
-  100, 40,100, 40,100,  80, 80, 80, 40, 40,       // 1-10
-  100, 40,100, 40,100, 100, 80, 80, 20, 20,       // 11-20
+  100, 40,100, 40,100, 100, 80, 80, 40, 40,       // 1-10   (6安泰→大吉)
+  100, 40,100, 40,100, 100, 80,100, 20, 20,       // 11-20  (18有志竟成→大吉)
   100, 40,100,100, 80,  40, 40, 40, 80, 60,       // 21-30
-  100,100,100, 20,100,  20,100, 60, 80, 20,       // 31-40
+  100,100,100, 20,100,  20,100, 80,100, 20,       // 31-40  (38文艺→吉, 39富贵→大吉)
   100, 60, 40, 20,100,  40,100,100, 40, 40,       // 41-50
    60,100, 60, 40, 60,  40,100, 60, 40, 20,       // 51-60
   100, 20,100, 20,100,  20,100,100, 20, 20,       // 61-70
@@ -1183,9 +1204,99 @@ function _scoreToTierInfo(score) {
   return              {cls:'daxiong', rating:'大凶'};
 }
 const _WUGE_DESC = {
-  天格:'祖宗运·先天遗传', 人格:'主运·核心格（最重要）',
+  天格:'祖宗运·先天定数', 人格:'主运·核心格（最重要）',
   地格:'前运·36岁前', 总格:'后运·晚年总运', 外格:'副运·社交人缘'
 };
+
+// 熊崎流 81数理 典称 + 运势简述（出处：熊崎健翁《姓名の神秘》）
+const _W81_INFO = [
+  null, // idx 0 占位
+  {name:'太极数',    text:'万象之源，独立天地，百事亨通，为吉之首'},
+  {name:'离散数',    text:'动摇不安，阴阳离散，基础薄弱，难成大业'},
+  {name:'福寿数',    text:'天赋福禄，聪颖多才，名利双收，富贵长寿'},
+  {name:'破坏数',    text:'破坏动荡，变故频生，根基不稳，艰难困苦'},
+  {name:'福德数',    text:'阴阳调和，蓄财纳福，圆满幸福，诸事顺遂'},
+  {name:'安泰数',    text:'天赐之福，平安顺遂，家庭和睦，贵人相助'},
+  {name:'刚毅数',    text:'意志刚强，独立自主，克服困难，但性易孤高'},
+  {name:'努力发展数', text:'勤奋耕耘，克苦耐劳，厚积薄发，终获成功'},
+  {name:'凶暴数',    text:'刚强过极，冲动骄横，虽有才华，晚运多难'},
+  {name:'空亡数',    text:'虚空亡失，困苦艰辛，努力落空，难有善终'},
+  {name:'宝瓶数',    text:'修身立德，内外俱美，福寿双全，幸福圆满'},
+  {name:'薄弱数',    text:'心志薄弱，依赖成性，身体多病，意志不坚'},
+  {name:'智慧数',    text:'聪颖博学，才华横溢，名扬四海，文武兼备'},
+  {name:'损失数',    text:'多遇意外，流离失所，家庭不稳，散漫无节'},
+  {name:'统率数',    text:'福禄双全，众望所归，领导有方，统御八方'},
+  {name:'厚重数',    text:'虽历艰辛，终成大器，贵人显助，厚积薄发'},
+  {name:'强权数',    text:'权威刚健，排除万难，功成名就，但刚愎自用'},
+  {name:'有志竟成数', text:'风云际会，排难制胜，有志者事竟成，终获大业'},
+  {name:'病弱数',    text:'病苦连绵，灾厄频至，身心俱伤，运势极衰'},
+  {name:'空虚数',    text:'理想虚幻，精力分散，徒有抱负，难以成事'},
+  {name:'独立数',    text:'独立自强，中年大成，首领之才，威震四方'},
+  {name:'秋草数',    text:'凄凉坎坷，努力难成，漂泊无依，晚境悲凉'},
+  {name:'旭日数',    text:'旭日东升，权威显赫，大展宏图，名扬天下'},
+  {name:'立身数',    text:'家门兴旺，财源广进，立身扬名，诸事如意'},
+  {name:'英俊数',    text:'才华卓著，聪明刚毅，有孤高之象，终成一格'},
+  {name:'英雄数',    text:'英雄末路，波澜起伏，浮沉不定，功业难成'},
+  {name:'中断数',    text:'中途受挫，盛极而衰，须防小人，成败参半'},
+  {name:'遭难数',    text:'历尽波折，家庭不睦，一生劳苦，难享安宁'},
+  {name:'智谋数',    text:'才智卓越，善谋善断，贵人相扶，终获成功'},
+  {name:'吉凶参半数', text:'吉凶难测，成败各半，命运在己，全赖自身'},
+  {name:'兴家立业数', text:'家庭和顺，事业兴旺，兴家立业，幸福美满'},
+  {name:'侥幸数',    text:'意外之喜，得天独厚，贵人扶持，运势顺遂'},
+  {name:'旭日升天数', text:'权威显赫，旭日高升，大权在握，事业宏图'},
+  {name:'破家数',    text:'破家败业，灾祸缠身，兵解之厄，极不吉利'},
+  {name:'平和数',    text:'温文儒雅，学识丰富，安定平和，文艺有成'},
+  {name:'英雄薄命数', text:'英雄气概却多薄命，波澜壮阔却结局凄然'},
+  {name:'仁寿数',    text:'仁德兼备，威信卓著，多子多福，功德圆满'},
+  {name:'文艺数',    text:'文艺天赋，才情洋溢，名声在外，宜走文学艺术'},
+  {name:'富贵数',    text:'富贵荣华，名利双收，统率之才，幸福长寿'},
+  {name:'无常数',    text:'变幻莫测，吉凶无定，成败难料，命途多舛'},
+  {name:'有德数',    text:'德高望重，名利兼得，众人仰慕，威名远播'},
+  {name:'艰苦奋斗数', text:'命途多舛但意志坚强，半吉半凶，全赖努力'},
+  {name:'散财数',    text:'财来财去，挥霍无节，虽有收入难以积累，晚年困苦'},
+  {name:'磨难数',    text:'苦难重重，步步维艰，缺乏贵援，难以脱困'},
+  {name:'大志数',    text:'顺风扬帆，实现宏志，名传后世，功业卓著'},
+  {name:'不遇数',    text:'怀才不遇，付出难获回报，时运不济，郁郁不得志'},
+  {name:'开花数',    text:'花开富贵，贵人相助，吉星高照，前途光明'},
+  {name:'有德望数',   text:'德高望重，品行端方，众望所归，家庭美满'},
+  {name:'苦心数',    text:'阴阳失调，功亏一篑，劳心苦体，难获大成'},
+  {name:'吉凶各半数', text:'祸福相依，成败各半，把握不定，命途多变'},
+  {name:'吉凶交错数', text:'吉凶交错，可上可下，成败在己，全赖自身努力'},
+  {name:'成功数',    text:'运势亨通，终成大业，智慧闪光，名利双收'},
+  {name:'内忧外困数', text:'外表光鲜，内忧连连，半成半败，喜忧参半'},
+  {name:'苦境数',    text:'劳苦心身，成功迟缓，多遇阻碍，难获大成'},
+  {name:'不完全数',   text:'外观繁荣，内实空虚，半吉半凶，需加倍努力'},
+  {name:'蹉跎数',    text:'诸事不顺，蹉跎岁月，志大才疏，难以成功'},
+  {name:'旱苗逢雨数', text:'先苦后甜，柳暗花明，艰难过后终获成功'},
+  {name:'半吉数',    text:'吉凶各半，把握机会可获成功，需积极进取'},
+  {name:'苦难数',    text:'困苦难排，艰辛劳碌，多遇阻力，少有大成'},
+  {name:'烦闷数',    text:'阴云密布，诸事受阻，前途茫然，黑暗迷途'},
+  {name:'荣禄数',    text:'荣华富贵，智慧超群，德才兼备，幸福美满'},
+  {name:'衰退数',    text:'一蹶不振，衰退颓败，愁苦连连，晚景凄凉'},
+  {name:'顺利数',    text:'一帆风顺，诸事如意，圆满幸福，家道兴旺'},
+  {name:'违背数',    text:'逆境重重，百事阻滞，理想落空，运势极差'},
+  {name:'兴旺数',    text:'欣欣向荣，地位稳固，万事亨通，长久兴旺'},
+  {name:'不安数',    text:'家庭不睦，动荡不安，困苦多端，阴阳失调'},
+  {name:'成功发展数', text:'地位稳固，事业有成，前程远大，幸福美满'},
+  {name:'明智数',    text:'智慧明达，前程远大，明辨是非，诸事顺遂'},
+  {name:'终末数',    text:'精力衰竭，晚年凄凉，难有善终，运势衰败'},
+  {name:'空亡数',    text:'虚空无实，万事落空，徒劳无功，一生困苦'},
+  {name:'进退两难数', text:'努力难以突破，进退维谷，需谨慎处世，守成为宜'},
+  {name:'先吉后凶数', text:'初期顺利，晚年受挫，需防中途变故'},
+  {name:'平稳小成数', text:'平稳顺利，小有成就，家庭和睦，安逸有福'},
+  {name:'失意数',    text:'失意落魄，遭遇阻力，事业难成，多有挫折'},
+  {name:'忍耐数',    text:'需磨砺意志，待机而动，能守能攻，后期可成'},
+  {name:'坎坷数',    text:'先苦后苦，坎坷一生，晚境尤难，运势多舛'},
+  {name:'吉凶交织数', text:'吉凶交织，喜忧参半，明辨机会，可化解逆境'},
+  {name:'先盛后衰数', text:'前半生顺遂，后半生艰难，需未雨绸缪，知足常乐'},
+  {name:'终末数',    text:'努力难有善果，晚境凄凉，空劳一生，难以善终'},
+  {name:'空虚数',    text:'一生劳苦，空虚无成，晚年凄凉，白驹过隙'},
+  {name:'还元数',    text:'与1同义，还元归本，万象更新，百事亨通，大吉之首'},
+];
+function _w81Info(n) {
+  let m = n > 81 ? ((n-1)%81)+1 : n < 1 ? 1 : n;
+  return _W81_INFO[m] || {name:'', text:''};
+}
 
 const _WX5_COLOR = {木:'#3D6B4A',火:'#B84A3A',土:'#7A5C3A',金:'#B8924A',水:'#3A5F8B'};
 
@@ -1287,7 +1398,9 @@ function renderWuGe(surCh, a, b = null) {
 
   // 五格单格渲染
   function cell(label, n, isMain=false) {
+    const isTian = label === '天格';
     const {cls, rating} = _scoreToTierInfo(_w81(n));
+    const {name: fortuneName, text: fortuneText} = _w81Info(n);
     const desc = _WUGE_DESC[label]||'';
     let strokesLabel;
     if (isSingle) {
@@ -1307,12 +1420,18 @@ function renderWuGe(surCh, a, b = null) {
     }
     const wxName = _digitWx(n);
     const [wxFg, wxBg] = WX_COLOR[wxName] || ['#888','#eee'];
-    return `<div class="wuge-cell ${cls}${isMain?' ren':''}">
-      <div class="wuge-cell-label">${label}</div>
+    return `<div class="wuge-cell ${isTian ? '' : cls}${isMain?' ren':''}">
+      <div class="wuge-cell-label">${label}${isMain?'<span class="wuge-cell-label-main">主运</span>':''}</div>
       <div class="wuge-cell-num">${n}</div>
       <div class="wuge-cell-wx" style="background:${wxBg};color:${wxFg}">${wxName}</div>
       <div class="wuge-cell-strokes">${strokesLabel}</div>
-      <div class="wuge-cell-rating">${rating}</div>
+      ${isTian
+        ? `<div class="wuge-cell-tian-badge">先天定数</div>`
+        : `<div class="wuge-cell-rating-row">
+            <div class="wuge-cell-rating">${rating}</div>
+            <div class="wuge-cell-fortune-name">${esc(fortuneName)}</div>
+          </div>
+          <div class="wuge-cell-fortune-text">${esc(fortuneText)}</div>`}
       <div class="wuge-cell-desc">${esc(desc)}</div>
     </div>`;
   }
@@ -1396,12 +1515,18 @@ function renderLookup() {
     <div class="lookup-wrap">
       <div class="lookup-title">输入名字，查看详细属性</div>
       <div class="lookup-input-row">
-        <input class="lookup-surname" id="lookupSurname" maxlength="1"
-          value="${esc(surname)}" placeholder="姓" title="姓氏（可选）">
-        <input class="lookup-name-input" id="lookupInput" maxlength="2"
-          placeholder="名（1-2字）" autocomplete="off">
+        <div class="lookup-name-card">
+          <input class="lookup-surname" id="lookupSurname" maxlength="1"
+            value="${esc(surname)}" placeholder="姓" title="姓氏（可选）">
+          <input class="lookup-name-input" id="lookupInput" maxlength="2"
+            placeholder="输入名字" autocomplete="off">
+        </div>
+        <div class="lookup-labels">
+          <div class="lookup-label-sur">姓氏</div>
+          <div class="lookup-label-name">名（1-2 字）</div>
+        </div>
       </div>
-      <div class="lookup-hint">输入 1-2 个汉字，自动显示属性；单字则按单字名规则计算五格</div>
+      <div class="lookup-hint">输入名字后自动显示属性；单字按单字名规则计算五格</div>
       <div class="lookup-result" id="lookupResult"></div>
     </div>`;
 
@@ -1725,7 +1850,7 @@ init();
   }
 
   document.addEventListener('mouseover', e => {
-    if (currentTab !== 'fav' && currentTab !== 'ai') return;
+    if (currentTab !== 'fav' && currentTab !== 'ai' && currentTab !== 'browse') return;
     const pill = e.target.closest('.fav-score-pill');
     if (!pill) return;
     const dataEl = pill.parentElement && pill.parentElement.querySelector('.wuge-popup-data');
